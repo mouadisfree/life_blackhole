@@ -13,6 +13,10 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-non-null-assertion": "warn",
     },
   },
+  {
+    files: ["**/*.test.ts", "**/*.test.tsx"],
+    rules: { "@typescript-eslint/no-non-null-assertion": "off" },
+  },
   globalIgnores([
     ".next/**",
     "out/**",

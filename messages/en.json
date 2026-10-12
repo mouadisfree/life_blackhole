@@ -8,5 +8,40 @@
     "headline": "Every second, a little more of you falls in.",
     "subline": "Watch your time fall into the black hole. Then go do something with what's left.",
     "comingSoon": "The horizon is forming."
+  },
+  "Stats": {
+    "estimateNote": "Rough estimates based on averages.",
+    "weekendsLeft": {
+      "label": "Weekends left",
+      "assumption": "One per remaining week"
+    },
+    "summersLeft": {
+      "label": "Summers left",
+      "assumption": "One per remaining year"
+    },
+    "fullMoonsLeft": {
+      "label": "Full moons left",
+      "assumption": "One every 29.5 days"
+    },
+    "sunrisesLeft": {
+      "label": "Sunrises left",
+      "assumption": "One per remaining day"
+    },
+    "booksLeft": {
+      "label": "Books you could still read",
+      "assumption": "At one book a month"
+    },
+    "heartbeatsSoFar": {
+      "label": "Heartbeats so far",
+      "assumption": "At about 70 beats a minute"
+    },
+    "breathsSoFar": {
+      "label": "Breaths so far",
+      "assumption": "At about 15 breaths a minute"
+    },
+    "sleepHoursSoFar": {
+      "label": "Hours asleep so far",
+      "assumption": "About a third of your life"
+    }
   }
 }

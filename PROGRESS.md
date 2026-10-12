@@ -6,8 +6,8 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 
 | Phase                      | Status                              |
 | -------------------------- | ----------------------------------- |
-| 1 — Setup & plan           | Done 2026-10-12 — awaiting approval |
-| 2 — Life math & data       | Not started                         |
+| 1 — Setup & plan           | Done 2026-10-12 (approved)          |
+| 2 — Life math & data       | Done 2026-10-12 — awaiting approval |
 | 3 — Core flow              | Not started                         |
 | 4 — The black hole         | Not started                         |
 | 5 — Life in weeks + polish | Not started                         |
@@ -28,9 +28,18 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 - Vitest 5 + jsdom + Testing Library (smoke test) · Playwright on iPhone 15 + Pixel 7 profiles (smoke test).
 - Placeholder landing proving tokens, fonts and i18n. Production build: all routes static.
 
+### Phase 2 — Life math & data (2026-10-12)
+
+- `scripts/build-life-tables.ts` (Node built-in TS): streams the UN WPP 2024 abridged life table CSV, keeps 2026 / medium variant / 237 countries + World / both·female·male / ages 0,1,5…100+, validates, writes `data/life-tables.json` (107 KB, 40 KB gzip). `pnpm data:download`, `pnpm data:build`. Source, year, URL, citation and licence note in `data/README.md` and in the JSON itself.
+- `lib/life-math.ts`: birth validation (local date/time + IANA zone → instant; invalid / future / too-old), consistent birthdays & whole-year age (Feb 29 → Feb 28), DST-aware breakdowns and totals, floored % lived, snapshot with no negatives.
+- `lib/life-expectancy.ts`: table resolution (country+sex → World fallback), linear interpolation of e(x), `getExpectedLifespan` (D2 yearly step), `getBirthdayBonus` (for Phase 5), lazy `loadLifeTables()`.
+- `lib/perspective-stats.ts`: config-driven stats (weekends, summers, full moons, sunrises, books left; heartbeats, breaths, sleep so far) with assumptions in one place; copy in `messages/en.json` → `Stats`.
+- 55 Vitest tests, also run with host TZ = Pacific/Chatham and America/St_Johns (`pnpm test:tz`, part of `pnpm check`) to prove results don't depend on the machine's zone.
+- `/debug` (dev only, 404 in production) prints all numbers live.
+
 ## Next
 
-- Phase 2: data script + cleaned UN WPP life tables with sources, `life-math.ts`, `life-expectancy.ts`, `perspective-stats.ts`, full Vitest coverage, debug page.
+- Phase 3: landing → birth date (+ optional country/sex) → Horizon page with live counters, % lived, perspective stats; Zustand persistence; settings + delete data. Country names via `Intl.DisplayNames` from ISO2.
 
 ## Decisions
 
@@ -88,3 +97,24 @@ shadcn 4.21 generates components that import `cn` from the `cn` package (shadcn-
 ### D13 — Build scripts denied for sharp, unrs-resolver, @parcel/watcher, @swc/core (2026-10-12)
 
 All ship prebuilt binaries; `pnpm-workspace.yaml` `allowBuilds` keeps their install scripts off.
+
+### D14 — WPP 2024, year 2026, medium variant (2026-10-12)
+
+WPP 2024 is the latest edition (no WPP 2026 files exist yet). It gives estimates through 2023 and projections afterwards; we use the current year's (2026) medium-variant period table since the app is about _today_. Rebuild yearly by changing `TABLE_YEAR`.
+**Licence:** the 2024 pages don't state one that we could find; earlier editions are CC BY 3.0 IGO. We attribute with UN DESA's recommended citation.
+
+### D15 — Abridged (5-year) tables + linear interpolation (2026-10-12)
+
+e(x) is smooth, so interpolating between 5-year ages is accurate to well under a month, at ~⅓ the size of single-age tables. Ages ≥ 100 use the open 100+ value.
+
+### D16 — "Outlived the average" means past e(0) (2026-10-12)
+
+Remaining life expectancy at your age is always positive (it's conditional on having survived), so you can never "pass" it. The bonus-time state from PROMPT.md §4.2 triggers when the user has lived longer than **life expectancy at birth** for their table; the remaining estimate stays positive and the UI reframes it. Remaining time is also clamped to 0 as a guard.
+
+### D17 — Birthdays and calendar math in the user's IANA zone (2026-10-12)
+
+Birth is stored as local date + optional time + IANA zone and converted to an instant with `@date-fns/tz`. Feb 29 birthdays fall on Feb 28 in non-leap years, applied consistently to age and anniversaries.
+
+### D18 — Perspective-stat choices (2026-10-12)
+
+Summers = whole remaining years (hemisphere-neutral). Weekends = Saturdays from today until the expected date. Heart rate 70 bpm (spec), breathing 15/min (adult resting range 12–20), sleep ⅓ of life, synodic month 29.53 days, 1 book/month. All labelled as rough estimates.
