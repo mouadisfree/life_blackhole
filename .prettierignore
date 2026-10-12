@@ -1,0 +1,9 @@
+.tools/
+.next/
+node_modules/
+pnpm-lock.yaml
+coverage/
+playwright-report/
+test-results/
+PROMPT.md
+AGENTS.md

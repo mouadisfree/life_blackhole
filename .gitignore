@@ -27,3 +27,6 @@ playwright/.cache/
 # os / editor
 .DS_Store
 *.log
+
+# keys
+*.pem
