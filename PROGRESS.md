@@ -4,16 +4,16 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 
 ## Status
 
-| Phase                      | Status                                                                          |
-| -------------------------- | ------------------------------------------------------------------------------- |
-| 1 — Setup & plan           | Done 2026-10-12 (approved)                                                      |
-| 2 — Life math & data       | Done 2026-10-12 (approved)                                                      |
-| 3 — Core flow              | Done 2026-10-12 (approved)                                                      |
-| 4 — The black hole         | Done 2026-10-12 (approved)                                                      |
-| 5 — Life in weeks + polish | Done 2026-10-12 (approved)                                                      |
-| 6 — Share                  | Done 2026-10-12 (approved)                                                      |
-| 7 — Launch prep            | Done 2026-10-12 (approved)                                                      |
-| 8 — Deploy                 | Ready 2026-10-12 — waiting on GitHub/Vercel accounts and the analytics decision |
+| Phase                      | Status                                                                  |
+| -------------------------- | ----------------------------------------------------------------------- |
+| 1 — Setup & plan           | Done 2026-10-12 (approved)                                              |
+| 2 — Life math & data       | Done 2026-10-12 (approved)                                              |
+| 3 — Core flow              | Done 2026-10-12 (approved)                                              |
+| 4 — The black hole         | Done 2026-10-12 (approved)                                              |
+| 5 — Life in weeks + polish | Done 2026-10-12 (approved)                                              |
+| 6 — Share                  | Done 2026-10-12 (approved)                                              |
+| 7 — Launch prep            | Done 2026-10-12 (approved)                                              |
+| 8 — Deploy                 | Ready 2026-10-12 — owner pushing to GitHub and deploying (no analytics) |
 
 ## Done
 
