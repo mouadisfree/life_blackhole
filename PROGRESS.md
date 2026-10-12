@@ -7,8 +7,8 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 | Phase                      | Status                              |
 | -------------------------- | ----------------------------------- |
 | 1 — Setup & plan           | Done 2026-10-12 (approved)          |
-| 2 — Life math & data       | Done 2026-10-12 — awaiting approval |
-| 3 — Core flow              | Not started                         |
+| 2 — Life math & data       | Done 2026-10-12 (approved)          |
+| 3 — Core flow              | Done 2026-10-12 — awaiting approval |
 | 4 — The black hole         | Not started                         |
 | 5 — Life in weeks + polish | Not started                         |
 | 6 — Share                  | Not started                         |
@@ -37,9 +37,20 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 - 55 Vitest tests, also run with host TZ = Pacific/Chatham and America/St_Johns (`pnpm test:tz`, part of `pnpm check`) to prove results don't depend on the machine's zone.
 - `/debug` (dev only, 404 in production) prints all numbers live.
 
+### Phase 3 — Core flow (2026-10-12)
+
+- `lib/store.ts`: Zustand + `persist` (localStorage key `life-blackhole`, v1) holding `profile` (birth input, country ISO3, sex) and `settings` (unit, hideCountdown, sound, motion). `deleteAllData()` clears memory and storage. Merge fills defaults for settings added later.
+- `lib/horizon.ts`: `computeHorizon(profile, data, now)` — the one pure call the Horizon screen renders. `lib/countries.ts`: localised country names via `Intl.DisplayNames`.
+- Hooks: `useHydrated` (skeleton until localStorage loads → no hydration mismatch), `useNow` (ticks on wall-clock second boundaries), `useLifeTables` (lazy, cached).
+- Landing (`/`): headline + birth-date form; "Improve accuracy" expander with country (lazy-loaded list), sex, optional birth time. Returning users get "Return to your horizon".
+- Horizon (`/horizon`): % lived ring (4 decimals), remaining + lived counters in calendar / days / seconds, perspective stat cards (compact numbers ≥ 100M), source line, bonus-time state, hide-countdown mode. `role="timer"` (aria-live off) + a static screen-reader summary.
+- Settings (`/settings`): edit details (keeps the original birth time zone), units, hide countdown, motion preference (consumed in Phase 4), sound (disabled until the V2 soundtrack), delete all data with confirmation, wellbeing note.
+- App pages share a header (`app/(app)/layout.tsx`); skip link in the root layout; personal pages are `noindex`.
+- Tests: 69 Vitest (store, horizon, countries, BirthForm component + Phase 2), 6 Playwright (full flow incl. persistence, hide countdown, delete → empty localStorage; on iPhone 15 WebKit + Pixel 7 Chromium).
+
 ## Next
 
-- Phase 3: landing → birth date (+ optional country/sex) → Horizon page with live counters, % lived, perspective stats; Zustand persistence; settings + delete data. Country names via `Intl.DisplayNames` from ISO2.
+- Phase 4: react-three-fiber black hole (shader accretion disk, particles, star field) driven by % lived; 2D canvas fallback; reduced-motion (system + setting); low-end detection; error boundary.
 
 ## Decisions
 
@@ -118,3 +129,11 @@ Birth is stored as local date + optional time + IANA zone and converted to an in
 ### D18 — Perspective-stat choices (2026-10-12)
 
 Summers = whole remaining years (hemisphere-neutral). Weekends = Saturdays from today until the expected date. Heart rate 70 bpm (spec), breathing 15/min (adult resting range 12–20), sleep ⅓ of life, synodic month 29.53 days, 1 book/month. All labelled as rough estimates.
+
+### D19 — Sound toggle shown but disabled (2026-10-12)
+
+The MVP spec lists a sound toggle, but the soundtrack is V2. The switch is stored and visible with "No sounds yet" so the setting exists when audio ships, without pretending to do something today.
+
+### D20 — Compact notation for very large stats (2026-10-12)
+
+Values ≥ 100 million (heartbeats, breaths) show as "1.13B" so cards fit a 390px screen; the exact number is kept for screen readers.

@@ -1,15 +1,18 @@
 import { getTranslations } from "next-intl/server";
+import { LandingEntry } from "@/components/landing/landing-entry";
 
-// Phase 1 placeholder: proves tokens, fonts and i18n are wired.
-// The real landing (birth-date input + idle black hole) arrives in Phase 3.
 export default async function Home() {
   const t = await getTranslations("Landing");
 
   return (
-    <main className="relative flex flex-1 flex-col items-center justify-center gap-8 px-4 py-16 text-center">
+    <main
+      id="main"
+      className="relative flex flex-1 flex-col items-center justify-center gap-10 px-4 py-12 text-center"
+    >
+      {/* Placeholder glow — replaced by the idle black hole in Phase 4. */}
       <div
         aria-hidden="true"
-        className="relative size-48 rounded-full bg-void shadow-[0_0_80px_10px_var(--ember),0_0_160px_40px_color-mix(in_oklch,var(--gold),transparent_70%)] motion-safe:animate-orbit"
+        className="relative size-40 rounded-full bg-void shadow-[0_0_80px_10px_var(--ember),0_0_160px_40px_color-mix(in_oklch,var(--gold),transparent_70%)] sm:size-48"
       >
         <div className="absolute inset-0 rounded-full ring-2 ring-flare/80" />
       </div>
@@ -24,7 +27,10 @@ export default async function Home() {
         <p className="text-pretty text-dust">{t("subline")}</p>
       </div>
 
-      <p className="counter text-sm text-gold">{t("comingSoon")}</p>
+      <div className="flex w-full max-w-sm flex-col gap-4">
+        <LandingEntry />
+        <p className="text-xs text-dust">{t("privacy")}</p>
+      </div>
     </main>
   );
 }

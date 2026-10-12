@@ -1,13 +1,71 @@
 {
   "Metadata": {
     "title": "Life Blackhole",
-    "description": "Watch your time fall into the black hole. Then go do something with what's left."
+    "description": "Watch your time fall into the black hole. Then go do something with what's left.",
+    "horizonTitle": "Your horizon",
+    "settingsTitle": "Settings"
+  },
+  "Nav": {
+    "home": "Life Blackhole",
+    "horizon": "Horizon",
+    "settings": "Settings",
+    "skipToContent": "Skip to content"
   },
   "Landing": {
     "eyebrow": "Life Blackhole",
     "headline": "Every second, a little more of you falls in.",
-    "subline": "Watch your time fall into the black hole. Then go do something with what's left.",
-    "comingSoon": "The horizon is forming."
+    "subline": "Enter your birth date to see how much of your time has crossed the horizon — and how much is still orbiting.",
+    "returning": "Your horizon is waiting.",
+    "returnCta": "Return to your horizon",
+    "privacy": "Your birth date never leaves this device."
+  },
+  "BirthForm": {
+    "birthDate": "Birth date",
+    "improveAccuracy": "Improve accuracy",
+    "improveAccuracyHint": "Country and sex refine the estimate. Both optional.",
+    "birthTime": "Birth time",
+    "birthTimeHint": "Optional. Defaults to midnight.",
+    "country": "Country",
+    "worldAverage": "World average",
+    "loadingCountries": "Loading countries…",
+    "sex": "Sex",
+    "sexHint": "As recorded in the UN data.",
+    "sexFemale": "Female",
+    "sexMale": "Male",
+    "sexUnspecified": "Prefer not to say",
+    "submit": "Enter the horizon",
+    "save": "Save changes",
+    "saved": "Saved.",
+    "errors": {
+      "required": "Enter your birth date.",
+      "invalid-date": "That date doesn't exist. Check the day and month.",
+      "invalid-time-zone": "We couldn't read your time zone. Try again in a different browser.",
+      "future": "That's in the future. You haven't fallen in yet.",
+      "too-old": "That would make you older than anyone on record. Check the year."
+    }
+  },
+  "Horizon": {
+    "loading": "Gathering light…",
+    "remainingLabel": "Estimated time remaining",
+    "livedLabel": "Time lived",
+    "bonusTitle": "You've outlived the average.",
+    "bonusBody": "Every day now is bonus time.",
+    "bonusRemainingLabel": "People your age live, on average, another",
+    "countdownHidden": "Countdown hidden. You can turn it back on in settings.",
+    "srSummary": "About {years, plural, one {# year} other {# years}} remaining. {percent}% of an average life lived.",
+    "perspectiveTitle": "In perspective",
+    "averageNote": "This is an average. You are not.",
+    "source": "Estimate from UN World Population Prospects 2024 (2026 life table) for {location}, {sex, select, female {women} male {men} other {all people}} of your age.",
+    "world": "the world",
+    "editDetails": "Edit details",
+    "percentLivedCaption": "of an average life lived",
+    "title": "Your horizon"
+  },
+  "Units": {
+    "years": "{count, plural, one {year} other {years}}",
+    "months": "{count, plural, one {month} other {months}}",
+    "days": "{count, plural, one {day} other {days}}",
+    "seconds": "{count, plural, one {second} other {seconds}}"
   },
   "Stats": {
     "estimateNote": "Rough estimates based on averages.",
@@ -43,5 +101,33 @@
       "label": "Hours asleep so far",
       "assumption": "About a third of your life"
     }
+  },
+  "Settings": {
+    "title": "Settings",
+    "detailsTitle": "Your details",
+    "displayTitle": "Display",
+    "unit": "Counter units",
+    "unitCalendar": "Years, months, days",
+    "unitDays": "Days",
+    "unitSeconds": "Seconds",
+    "hideCountdown": "Hide the countdown",
+    "hideCountdownHint": "Keep the percentage and perspective, without the ticking numbers.",
+    "motion": "Motion",
+    "motionSystem": "Match my device",
+    "motionReduce": "Reduce motion",
+    "motionFull": "Full motion",
+    "sound": "Sound",
+    "soundHint": "No sounds yet. This will control the ambient soundtrack when it arrives.",
+    "privacyTitle": "Your data",
+    "privacyBody": "Everything is stored only in this browser. Nothing is sent to a server.",
+    "delete": "Delete all my data",
+    "deleteConfirmTitle": "Delete all your data?",
+    "deleteConfirmBody": "This removes your birth date, details and settings from this browser. It can't be undone.",
+    "deleteConfirm": "Delete everything",
+    "cancel": "Cancel",
+    "noProfile": "You haven't entered a birth date yet."
+  },
+  "Wellbeing": {
+    "note": "If thinking about time feels heavy right now, it's okay to close this and talk to someone you trust."
   }
 }
