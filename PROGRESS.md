@@ -10,8 +10,8 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 | 2 — Life math & data       | Done 2026-10-12 (approved)          |
 | 3 — Core flow              | Done 2026-10-12 (approved)          |
 | 4 — The black hole         | Done 2026-10-12 (approved)          |
-| 5 — Life in weeks + polish | Done 2026-10-12 — awaiting approval |
-| 6 — Share                  | Not started                         |
+| 5 — Life in weeks + polish | Done 2026-10-12 (approved)          |
+| 6 — Share                  | Done 2026-10-12 — awaiting approval |
 | 7 — Launch prep            | Not started                         |
 | 8 — Deploy                 | Not started                         |
 
@@ -68,9 +68,18 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 - Accessibility: axe (WCAG 2.2 AA tags) clean on landing, horizon, weeks, settings, about on WebKit + Chromium; keyboard-only landing flow; labelled nav landmarks; screen-reader summaries for counters and the grid.
 - Tests: 98 Vitest, 36 Playwright.
 
+### Phase 6 — Share (2026-10-12)
+
+- Share cards rendered **on the device** (`components/share/render-share-card.ts`): 1080×1920 story and 1080×1080 post with stars, a mini black hole (shared 2D renderer, zoomed, softened), % lived + progress bar, time remaining, weekends left, optional birth date, tagline and site host. PNG via `canvas.toBlob`.
+- `lib/share-card.ts` decides what appears (`DEFAULT_SHARE_OPTIONS`: birth date **off**); file names carry no personal data.
+- Share sheet (`components/share/share-sheet.tsx`, shadcn Dialog): snapshot taken when opened, live preview, format choice, four privacy switches, Web Share API with files when supported, download fallback otherwise (and after a failed share).
+- `/api/og`: generic 1200×630 link preview, static, takes no parameters (queries ignored). Root metadata now sets `metadataBase`, Open Graph and Twitter card. `NEXT_PUBLIC_SITE_URL` (see `.env.example`) drives metadata and the host on cards.
+- 2D renderer refactored into `components/blackhole/draw-2d.ts`: smoother disk (thin streaks, continuous variation), cached lensed arcs with conic-gradient fade, optional `zoom` / `soft` (one blur per disk half — share cards only; the live fallback stays at 60 fps).
+- Tests: 104 Vitest (+ share content, defaults, formats, file names, calendar date), 42 Playwright (+ Web Share called with a PNG, download fallback, birth date off by default, no network requests while sharing).
+
 ## Next
 
-- Phase 6: `/api/og` (generic only), client-side 9:16 + 1:1 share cards (mini black hole, % lived, remaining time, URL), Web Share API with download fallback, privacy toggles (birth date off by default).
+- Phase 7: SEO (sitemap, robots, favicon set, manifest), Lighthouse audit to ≥ 90 / 95 / 95 on mobile, full end-to-end flow test, README with setup + deploy steps, real-device checks (iPhone Safari, Android Chrome).
 
 ## Decisions
 
@@ -177,3 +186,11 @@ The classic "life in weeks" layout: 52 dots per row, one row per year of age, so
 ### D25 — Birthday bonus window: 7 days, once per age (2026-10-12)
 
 People don't open the app every day, so the moment waits up to a week after the birthday and is dismissed per age.
+
+### D26 — `/api/og` is static and parameter-free (2026-10-12)
+
+It renders the same generic image for every request, so even a hand-crafted URL can't put personal data into a preview, and it can be served from the CDN.
+
+### D27 — Blur only where it's affordable (2026-10-12)
+
+Canvas `filter: blur()` per fill froze the page (~2,500 fills/frame). The live fallback runs without blur; share cards (rendered once) blur each disk half in a single offscreen composite.

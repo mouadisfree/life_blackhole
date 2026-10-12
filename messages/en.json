@@ -186,5 +186,35 @@
     "weeks": "Life in weeks",
     "madeWith": "Data: UN World Population Prospects 2024",
     "nav": "Footer"
+  },
+  "Share": {
+    "open": "Share my horizon",
+    "title": "Share your horizon",
+    "description": "Made on your device. Nothing is uploaded.",
+    "format": "Format",
+    "story": "Story · 9:16",
+    "post": "Post · 1:1",
+    "show": "Show on the card",
+    "showPercent": "% of life lived",
+    "showRemaining": "Time remaining",
+    "showWeekends": "Weekends left",
+    "showBirthDate": "My birth date",
+    "birthDateHint": "Off by default. Anyone who sees the card will know your age.",
+    "preview": "Preview of your share card",
+    "generating": "Rendering…",
+    "share": "Share",
+    "download": "Download image",
+    "close": "Close",
+    "error": "Couldn't create the image. Try again or use a different browser.",
+    "card": {
+      "brand": "LIFE BLACKHOLE",
+      "remaining": "About {years, plural, one {# year} other {# years}} left in orbit",
+      "weekends": "≈ {count, number} weekends left",
+      "birthDate": "Born {date}",
+      "tagline": "Watch your time fall into the black hole. Then go do something with what's left.",
+      "taglineShort": "Go do something with what's left."
+    },
+    "text": "How much of your time has fallen in?",
+    "textWithPercent": "{percent}% of my time has fallen in. How about yours?"
   }
 }

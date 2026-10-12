@@ -18,6 +18,10 @@ export PATH="$PWD/.tools/node/bin:$PATH"
 
 Scripts: `pnpm dev` · `pnpm build` · `pnpm lint` · `pnpm typecheck` (runs `next typegen` first) · `pnpm test` · `pnpm test:e2e` · `pnpm check` (lint + typecheck + format + unit tests).
 
+## Environment
+
+`NEXT_PUBLIC_SITE_URL` — public site URL (metadata, OG, host on share cards). Copy `.env.example` to `.env.local` for local overrides.
+
 ## Stack
 
 Next.js 16 (App Router, Turbopack, Cache Components) · React 19.3 · TypeScript 6.0 strict · Tailwind v4 (tokens in `app/globals.css` `@theme`) · shadcn/ui · `motion` (`motion/react`) · react-three-fiber + drei · Zustand (`persist`) · date-fns v4 · next-intl · Vitest · Playwright · pnpm · Vercel.

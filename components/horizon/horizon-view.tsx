@@ -8,6 +8,7 @@ import { LiveCounter } from "@/components/counters/live-counter";
 import { BlackHole } from "@/components/blackhole/black-hole";
 import { BirthdayBonus } from "@/components/horizon/birthday-bonus";
 import { ProgressBar } from "@/components/counters/progress-bar";
+import { ShareSheet } from "@/components/share/share-sheet";
 import { PerspectiveStats } from "@/components/stats/perspective-stats";
 import { useHydrated } from "@/hooks/use-hydrated";
 import { useLifeTables } from "@/hooks/use-life-tables";
@@ -147,6 +148,10 @@ export function HorizonView() {
       )}
 
       <PerspectiveStats stats={stats} />
+
+      {profile && (
+        <ShareSheet horizon={horizon} birthDate={profile.birth.date} />
+      )}
 
       <Link
         href="/weeks"
