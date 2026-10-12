@@ -96,7 +96,7 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 
 - Verified a fresh `git clone` installs with `--frozen-lockfile` and builds with `NEXT_PUBLIC_SITE_URL` set (sitemap/robots pick it up). Lockfile format v9.
 - `LAUNCH.md`: GitHub push, Vercel project settings and env vars, custom domain, optional analytics, launch checklist (pre-launch URLs, real iPhone/Android checks, desktop, post-launch, yearly data refresh).
-- Blocked on the owner: creating the GitHub repo and Vercel project (accounts), domain DNS, and the Vercel Analytics decision.
+- Owner creates the GitHub repo and Vercel project and sets domain DNS. Analytics: none (D31).
 
 ## Next
 
@@ -228,3 +228,7 @@ The black hole (WebGL probe, caches, first frame) starts on `requestIdleCallback
 ### D30 — Life tables fetched as static JSON (2026-10-12)
 
 `JSON.parse` of a fetched file is cheaper than evaluating a 100 KB JS module, and a `<link rel="preload">` lets it download with the HTML. `data/life-tables.json` stays the source of truth (tests, About page); `public/data/` is a generated copy.
+
+### D31 — No analytics at launch (2026-10-12)
+
+The owner chose to launch with zero third-party requests. Revisit after launch if usage data is needed; Vercel Web Analytics (cookie-less) is the planned option, with a matching line in the About page's privacy section.
