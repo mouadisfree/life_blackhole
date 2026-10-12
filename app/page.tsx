@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { BlackHole } from "@/components/blackhole/black-hole";
 import { LandingEntry } from "@/components/landing/landing-entry";
 
 export default async function Home() {
@@ -9,13 +10,12 @@ export default async function Home() {
       id="main"
       className="relative flex flex-1 flex-col items-center justify-center gap-10 px-4 py-12 text-center"
     >
-      {/* Placeholder glow — replaced by the idle black hole in Phase 4. */}
-      <div
-        aria-hidden="true"
-        className="relative size-40 rounded-full bg-void shadow-[0_0_80px_10px_var(--ember),0_0_160px_40px_color-mix(in_oklch,var(--gold),transparent_70%)] sm:size-48"
-      >
-        <div className="absolute inset-0 rounded-full ring-2 ring-flare/80" />
-      </div>
+      {/* Idle black hole: lightweight 2D canvas on the landing page (D8). */}
+      <BlackHole
+        variant="idle"
+        percentLived={35}
+        className="-my-6 h-64 w-screen max-w-xl sm:h-80"
+      />
 
       <div className="flex max-w-md flex-col gap-4">
         <p className="text-sm tracking-[0.3em] text-dust uppercase">

@@ -8,8 +8,8 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 | -------------------------- | ----------------------------------- |
 | 1 — Setup & plan           | Done 2026-10-12 (approved)          |
 | 2 — Life math & data       | Done 2026-10-12 (approved)          |
-| 3 — Core flow              | Done 2026-10-12 — awaiting approval |
-| 4 — The black hole         | Not started                         |
+| 3 — Core flow              | Done 2026-10-12 (approved)          |
+| 4 — The black hole         | Done 2026-10-12 — awaiting approval |
 | 5 — Life in weeks + polish | Not started                         |
 | 6 — Share                  | Not started                         |
 | 7 — Launch prep            | Not started                         |
@@ -48,9 +48,19 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 - App pages share a header (`app/(app)/layout.tsx`); skip link in the root layout; personal pages are `noindex`.
 - Tests: 69 Vitest (store, horizon, countries, BirthForm component + Phase 2), 6 Playwright (full flow incl. persistence, hide countdown, delete → empty localStorage; on iPhone 15 WebKit + Pixel 7 Chromium).
 
+### Phase 4 — The black hole (2026-10-12)
+
+- `components/blackhole/scene.tsx` (react-three-fiber, lazy-loaded): black event horizon, GLSL accretion disk (Keplerian ω ∝ r^-1.5 swirl, fbm turbulence, temperature ramp flare→gold→ember, Doppler-bright side), camera-facing halo quad for the photon ring + lensed far-side arc, 1,200 GPU-animated particles spiralling inward, drei `Stars`. Camera rig refits to the aspect ratio (outer disk runs off the sides on portrait phones).
+- Data-driven via `lib/blackhole-params.ts`: % lived grows the horizon (0.6 → 1.2) and drains the matter / particle share; quantised to 0.1% so geometry isn't rebuilt every second.
+- `components/blackhole/fallback-2d.tsx`: canvas version using the same params (disk halves around an opaque horizon, lensed arcs, photon ring, particles). DPR ≤ 2; pauses offscreen.
+- `components/blackhole/black-hole.tsx`: picks the renderer via `lib/render-mode.ts` (device tier from WebGL support, GPU renderer string, memory, cores, Save-Data). Keeps the 2D version up until WebGL has drawn; error boundary + WebGL context-loss + drei `PerformanceMonitor` all fall back to 2D (`data-fallback-reason`).
+- Reduced motion (OS or in-app setting, `hooks/use-reduced-motion.ts`): still frame (`frameloop="demand"` / single canvas draw).
+- Horizon screen: full-bleed scene replaces the progress ring; % lived + thin progress bar below. Landing uses the 2D idle black hole.
+- Tests: 87 Vitest (+ device tiers, render plan, params, error boundary), 16 Playwright (+ 2D on landing, painted canvas on horizon, WebGL unavailable → 2D, OS reduced motion, in-app override).
+
 ## Next
 
-- Phase 4: react-three-fiber black hole (shader accretion disk, particles, star field) driven by % lived; 2D canvas fallback; reduced-motion (system + setting); low-end detection; error boundary.
+- Phase 5: life-in-weeks grid, animations (motion), copywriting pass, About page with sources, wellbeing note, birthday-bonus moment (D2), accessibility pass.
 
 ## Decisions
 
@@ -137,3 +147,15 @@ The MVP spec lists a sound toggle, but the soundtrack is V2. The switch is store
 ### D20 — Compact notation for very large stats (2026-10-12)
 
 Values ≥ 100 million (heartbeats, breaths) show as "1.13B" so cards fit a 390px screen; the exact number is kept for screen readers.
+
+### D21 — Low-end devices never download three.js (2026-10-12)
+
+The renderer is chosen before the scene chunk is requested, so phones rated "low" (software GPU, ≤ 2 GB RAM, ≤ 2 cores, Save-Data, old Mali/Adreno/PowerVR) and the landing page get only the 2D canvas.
+
+### D22 — WebGL canvas is opaque, cleared to `--void` (2026-10-12)
+
+All shader materials are additive (colour = emitted light). Writing alpha into a transparent canvas punched dark rectangles into the page; an opaque canvas matching the page background is seamless because the hero is full-bleed.
+
+### D23 — Reduced motion = a still frame, same renderer (2026-10-12)
+
+Users who reduce motion still get the full-quality image, just frozen. The "too slow" fallback only fires while the page is visible, so throttled background tabs don't get stuck on 2D.

@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useMemo } from "react";
 import { LiveCounter } from "@/components/counters/live-counter";
-import { ProgressRing } from "@/components/counters/progress-ring";
+import { BlackHole } from "@/components/blackhole/black-hole";
+import { ProgressBar } from "@/components/counters/progress-bar";
 import { PerspectiveStats } from "@/components/stats/perspective-stats";
 import { useHydrated } from "@/hooks/use-hydrated";
 import { useLifeTables } from "@/hooks/use-life-tables";
@@ -81,19 +82,26 @@ export function HorizonView() {
         <h1 className="sr-only">{t("title")}</h1>
       )}
 
-      <section className="relative grid place-items-center">
-        <ProgressRing percent={snapshot.percentLived} size={260} />
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 px-8 text-center">
-          <p
-            className="counter text-3xl font-medium text-starlight"
-            aria-hidden="true"
-          >
-            {percent}%
-          </p>
-          <p className="max-w-[12rem] text-xs text-dust" aria-hidden="true">
-            {t("percentLivedCaption")}
-          </p>
-        </div>
+      {/* Full-bleed scene; % lived controls the horizon size and remaining matter. */}
+      <div className="relative -mt-4 -mb-6 w-screen">
+        <BlackHole
+          variant="horizon"
+          percentLived={snapshot.percentLived}
+          className="h-[min(48svh,460px)] w-full"
+        />
+      </div>
+
+      <section className="flex w-full max-w-xs flex-col items-center gap-3">
+        <p
+          className="counter text-4xl font-medium text-starlight"
+          aria-hidden="true"
+        >
+          {percent}%
+        </p>
+        <ProgressBar percent={snapshot.percentLived} />
+        <p className="text-xs text-dust" aria-hidden="true">
+          {t("percentLivedCaption")}
+        </p>
       </section>
 
       {settings.hideCountdown ? (
