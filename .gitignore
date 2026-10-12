@@ -1,0 +1,29 @@
+# deps
+node_modules/
+.pnpm-store/
+
+# local toolchain (project-local Node, if used)
+.tools/
+
+# next
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# testing
+coverage/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# env
+.env*
+!.env.example
+
+# vercel
+.vercel/
+
+# os / editor
+.DS_Store
+*.log
