@@ -4,16 +4,16 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 
 ## Status
 
-| Phase                      | Status                              |
-| -------------------------- | ----------------------------------- |
-| 1 — Setup & plan           | Done 2026-10-12 (approved)          |
-| 2 — Life math & data       | Done 2026-10-12 (approved)          |
-| 3 — Core flow              | Done 2026-10-12 (approved)          |
-| 4 — The black hole         | Done 2026-10-12 (approved)          |
-| 5 — Life in weeks + polish | Done 2026-10-12 (approved)          |
-| 6 — Share                  | Done 2026-10-12 (approved)          |
-| 7 — Launch prep            | Done 2026-10-12 — awaiting approval |
-| 8 — Deploy                 | Not started                         |
+| Phase                      | Status                                                                          |
+| -------------------------- | ------------------------------------------------------------------------------- |
+| 1 — Setup & plan           | Done 2026-10-12 (approved)                                                      |
+| 2 — Life math & data       | Done 2026-10-12 (approved)                                                      |
+| 3 — Core flow              | Done 2026-10-12 (approved)                                                      |
+| 4 — The black hole         | Done 2026-10-12 (approved)                                                      |
+| 5 — Life in weeks + polish | Done 2026-10-12 (approved)                                                      |
+| 6 — Share                  | Done 2026-10-12 (approved)                                                      |
+| 7 — Launch prep            | Done 2026-10-12 (approved)                                                      |
+| 8 — Deploy                 | Ready 2026-10-12 — waiting on GitHub/Vercel accounts and the analytics decision |
 
 ## Done
 
@@ -92,9 +92,16 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 - README with setup, scripts, layout and Vercel deploy steps.
 - Not possible here: real-device checks (no Xcode for the iOS Simulator, no Android device) — see launch checklist in Phase 8.
 
+### Phase 8 — Deploy prep (2026-10-12)
+
+- Verified a fresh `git clone` installs with `--frozen-lockfile` and builds with `NEXT_PUBLIC_SITE_URL` set (sitemap/robots pick it up). Lockfile format v9.
+- `LAUNCH.md`: GitHub push, Vercel project settings and env vars, custom domain, optional analytics, launch checklist (pre-launch URLs, real iPhone/Android checks, desktop, post-launch, yearly data refresh).
+- Blocked on the owner: creating the GitHub repo and Vercel project (accounts), domain DNS, and the Vercel Analytics decision.
+
 ## Next
 
-- Phase 8: deploy to Vercel (GitHub repo, `NEXT_PUBLIC_SITE_URL`, custom domain), real-device checks on iPhone Safari and Android Chrome, Vercel Analytics only if approved, launch checklist.
+- Push to GitHub, first Vercel deploy, set the domain; then run the checklist in `LAUNCH.md` and `BASE_URL=https://<domain> pnpm lighthouse`.
+- V2 backlog (after approval): accounts/sync (Supabase), intentions, PWA offline + reminders, lifestyle adjustments with cited sources, FR/AR/Darija, ambient sound.
 
 ## Decisions
 
