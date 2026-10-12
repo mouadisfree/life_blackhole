@@ -201,8 +201,15 @@ export function getBirthdayBonus(input: LifespanInput): number | null {
   return current.date.getTime() - previous.date.getTime();
 }
 
-/** Lazy-load the ~40 KB (gzip) table so it stays out of the initial bundle. */
+/**
+ * Static copy of data/life-tables.json served from /public (written by
+ * `pnpm data:build`). Fetched rather than imported: JSON.parse is much cheaper
+ * than evaluating a 100 KB JS module on a phone, and the page can preload it.
+ */
+export const LIFE_TABLES_URL = "/data/life-tables-2026.json";
+
 export async function loadLifeTables(): Promise<LifeTableData> {
-  const mod = await import("@/data/life-tables.json");
-  return mod.default as LifeTableData;
+  const res = await fetch(LIFE_TABLES_URL);
+  if (!res.ok) throw new Error(`Life tables: HTTP ${res.status}`);
+  return (await res.json()) as LifeTableData;
 }

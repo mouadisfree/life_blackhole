@@ -11,7 +11,9 @@ export default function AppTemplate({
   return (
     <motion.div
       className="flex w-full flex-1 flex-col items-center"
-      initial={{ opacity: 0, scale: 1.04, y: 8 }}
+      // Not from opacity 0: fully transparent content doesn't count as painted,
+      // which would delay Largest Contentful Paint on every page.
+      initial={{ opacity: 0.6, scale: 1.03, y: 8 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
     >

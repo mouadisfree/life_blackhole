@@ -11,10 +11,12 @@ import { ProgressBar } from "@/components/counters/progress-bar";
 import { ShareSheet } from "@/components/share/share-sheet";
 import { PerspectiveStats } from "@/components/stats/perspective-stats";
 import { useHydrated } from "@/hooks/use-hydrated";
-import { useLifeTables } from "@/hooks/use-life-tables";
+import { preloadLifeTables, useLifeTables } from "@/hooks/use-life-tables";
 import { useNow } from "@/hooks/use-now";
 import { computeHorizon } from "@/lib/horizon";
 import { useAppStore } from "@/lib/store";
+
+preloadLifeTables();
 
 export function HorizonView() {
   const t = useTranslations("Horizon");
@@ -42,7 +44,11 @@ export function HorizonView() {
 
   if (!horizon) {
     return (
-      <p className="py-24 text-center text-dust" role="status">
+      // Fills the screen so the footer starts below the fold: no layout shift on load.
+      <p
+        className="flex min-h-svh items-center justify-center text-center text-dust"
+        role="status"
+      >
         {t("loading")}
       </p>
     );

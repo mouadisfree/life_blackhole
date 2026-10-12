@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo } from "react";
 import { useHydrated } from "@/hooks/use-hydrated";
-import { useLifeTables } from "@/hooks/use-life-tables";
+import { preloadLifeTables, useLifeTables } from "@/hooks/use-life-tables";
 import { useNow } from "@/hooks/use-now";
 import { getDirection } from "@/i18n/config";
 import { computeHorizon } from "@/lib/horizon";
 import { useAppStore } from "@/lib/store";
 import { WeeksGrid } from "./weeks-grid";
+
+preloadLifeTables();
 
 export function WeeksView() {
   const t = useTranslations("Weeks");

@@ -2,15 +2,32 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { BlackHole } from "@/components/blackhole/black-hole";
 import { LandingEntry } from "@/components/landing/landing-entry";
+import { SITE_URL } from "@/lib/site";
 
 export default async function Home() {
   const t = await getTranslations("Landing");
+  const tm = await getTranslations("Metadata");
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: tm("title"),
+    description: tm("description"),
+    url: SITE_URL,
+    applicationCategory: "LifestyleApplication",
+    operatingSystem: "Any",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  };
 
   return (
     <main
       id="main"
       className="relative flex flex-1 flex-col items-center justify-center gap-10 px-4 py-12 text-center"
     >
+      <script
+        type="application/ld+json"
+        // Static, server-built JSON (no user data).
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Idle black hole: lightweight 2D canvas on the landing page (D8). */}
       <BlackHole
         variant="idle"

@@ -1,7 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("core flow", () => {
-  test("landing → horizon → settings → delete", async ({ page }) => {
+  test("full journey: landing → horizon → weeks → share → about → settings → delete", async ({
+    page,
+  }) => {
     await page.goto("/");
 
     // Validation
@@ -51,6 +53,37 @@ test.describe("core flow", () => {
     // Persists across reloads
     await page.reload();
     await expect(remaining).toBeVisible();
+
+    // Black hole is drawn (decorative, hidden from assistive tech)
+    await expect(page.locator("[data-render-mode]")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+
+    // Life in weeks
+    await nav.getByRole("link", { name: "Life in weeks" }).click();
+    await expect(
+      page.getByText(/^You've lived [\d,]+ weeks\. About [\d,]+ remain\.$/),
+    ).toBeVisible();
+
+    // Share: preview renders on the device; birth date off by default
+    await nav.getByRole("link", { name: "Horizon" }).click();
+    await page.getByRole("button", { name: "Share my horizon" }).click();
+    const sheet = page.getByRole("dialog", { name: "Share your horizon" });
+    await expect(
+      sheet.getByRole("img", { name: "Preview of your share card" }),
+    ).toBeVisible();
+    await expect(
+      sheet.getByRole("switch", { name: "My birth date" }),
+    ).not.toBeChecked();
+    await page.keyboard.press("Escape");
+    await expect(sheet).toHaveCount(0);
+
+    // About: method and source
+    await page.getByRole("link", { name: "How we calculate this" }).click();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "About Life Blackhole" }),
+    ).toBeVisible();
 
     // Settings: hide the countdown
     await nav.getByRole("link", { name: "Settings" }).click();

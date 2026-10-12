@@ -79,6 +79,67 @@ function lensedArcs(
   return canvas;
 }
 
+const DISK_LAYERS = 8;
+const BANDS_PER_LAYER = 4;
+let layerCache: {
+  key: string;
+  layers: HTMLCanvasElement[];
+  radii: number[];
+} | null = null;
+
+/**
+ * The live renderer's disk: streaks pre-rendered (unrotated, unsquashed) into
+ * a few layers, then rotated per frame — ~16 image draws instead of ~2,500
+ * arc fills. Cached at 1× resolution: it's a soft glow, and that keeps memory
+ * around 0.5 MB per layer on phones.
+ */
+function diskLayers(inner: number, outer: number, matter: number) {
+  if (typeof document === "undefined") return null;
+  const key = [inner.toFixed(1), outer.toFixed(1), matter.toFixed(3)].join("|");
+  if (layerCache?.key === key) return layerCache;
+  const size = Math.ceil(outer * 2) + 2;
+  const total = DISK_LAYERS * BANDS_PER_LAYER;
+  const segs = 96;
+  const layers: HTMLCanvasElement[] = [];
+  const radii: number[] = [];
+  for (let l = 0; l < DISK_LAYERS; l++) {
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const c = canvas.getContext("2d");
+    if (!c) return null;
+    c.translate(size / 2, size / 2);
+    const g = c.createRadialGradient(0, 0, inner, 0, 0, outer);
+    g.addColorStop(0, `rgba(255,244,224,${0.9 * matter})`);
+    g.addColorStop(0.35, `rgba(255,179,71,${0.7 * matter})`);
+    g.addColorStop(1, "rgba(255,107,26,0)");
+    c.fillStyle = g;
+    for (let j = 0; j < BANDS_PER_LAYER; j++) {
+      const b = l * BANDS_PER_LAYER + j;
+      const r0 = inner + ((outer - inner) * b) / total;
+      const r1 = inner + ((outer - inner) * (b + 1)) / total;
+      const k = 2 + (b % 4);
+      const phase = b * 2.399;
+      const fade = Math.pow(1 - b / total, 1.3);
+      for (let i = 0; i < segs; i++) {
+        const a0 = (i / segs) * Math.PI * 2;
+        const a1 = ((i + 1) / segs) * Math.PI * 2;
+        c.globalAlpha =
+          (0.55 + 0.45 * Math.sin(k * ((a0 + a1) / 2) + phase)) * fade * 0.8;
+        c.beginPath();
+        c.arc(0, 0, r1, a0, a1);
+        c.arc(0, 0, r0, a1, a0, true);
+        c.closePath();
+        c.fill();
+      }
+    }
+    layers.push(canvas);
+    radii.push(inner + ((outer - inner) * (l + 0.5)) / DISK_LAYERS);
+  }
+  layerCache = { key, layers, radii };
+  return layerCache;
+}
+
 export function drawBlackHole(
   ctx: CanvasRenderingContext2D,
   w: number,
@@ -97,6 +158,8 @@ export function drawBlackHole(
   } = {},
 ) {
   const { zoom = 1, soft = false } = options;
+  // Not laid out yet (0×0 canvas): nothing to draw, and caches would be empty.
+  if (w < 1 || h < 1) return;
   const p = blackHoleParams(percentLived);
   const cx = w / 2;
   const cy = h / 2;
@@ -126,7 +189,6 @@ export function drawBlackHole(
     return g;
   };
 
-  // Disk as clumpy arcs rotating at Keplerian-ish speed, split into back/front halves.
   // Disk as thin concentric streaks; brightness varies smoothly around each
   // ring (no per-segment jumps, which read as tiles at high resolution).
   const streaks = (c: CanvasRenderingContext2D, front: boolean) => {
@@ -166,6 +228,28 @@ export function drawBlackHole(
   };
 
   const diskHalf = (front: boolean) => {
+    if (!soft) {
+      const cache = diskLayers(inner, outer, p.matter);
+      if (cache) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        // Back half = upper half on screen, front half = lower half.
+        ctx.beginPath();
+        ctx.rect(-w, front ? 0 : -h, w * 2, h);
+        ctx.clip();
+        ctx.scale(1, TILT);
+        cache.layers.forEach((layer, i) => {
+          const spin =
+            t * (1.4 / Math.pow((cache.radii[i] ?? outer) / unit, 1.5));
+          ctx.save();
+          ctx.rotate(spin);
+          ctx.drawImage(layer, -layer.width / 2, -layer.height / 2);
+          ctx.restore();
+        });
+        ctx.restore();
+        return;
+      }
+    }
     const canBlur = soft && "filter" in ctx && typeof document !== "undefined";
     if (!canBlur) {
       streaks(ctx, front);

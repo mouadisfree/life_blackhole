@@ -1,8 +1,14 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it, vi } from "vitest";
+import tables from "@/data/life-tables.json";
 import messages from "@/messages/en.json";
 import { BirthForm } from "./birth-form";
+
+// The app fetches the tables from /public; tests use the source JSON directly.
+vi.mock("@/hooks/use-life-tables", () => ({
+  useLifeTables: (enabled = true) => (enabled ? tables : null),
+}));
 
 function setup(onSubmit = vi.fn()) {
   render(
@@ -63,5 +69,18 @@ describe("BirthForm", () => {
     expect(toggle).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByLabelText("Country")).toBeInTheDocument();
     expect(screen.getByLabelText("Birth time")).toBeInTheDocument();
+  });
+});
+
+describe("BirthForm country list", () => {
+  it("lists localised countries once the expander opens", () => {
+    setup();
+    fireEvent.click(screen.getByRole("button", { name: "Improve accuracy" }));
+    const select = screen.getByLabelText("Country");
+    expect(select).toBeEnabled();
+    expect(screen.getByRole("option", { name: "Morocco" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: "World average" }),
+    ).toBeInTheDocument();
   });
 });

@@ -318,3 +318,13 @@ describe("real UN WPP 2024 data", () => {
     ).toBeGreaterThan(40 * 365 * MS_PER_DAY);
   });
 });
+
+describe("served copy", () => {
+  it("public/data matches data/life-tables.json (run `pnpm data:build` after changes)", async () => {
+    const { readFileSync } = await import("node:fs");
+    const served = JSON.parse(
+      readFileSync("public/data/life-tables-2026.json", "utf8"),
+    );
+    expect(served).toEqual(data);
+  });
+});

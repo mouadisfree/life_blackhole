@@ -39,7 +39,21 @@ export function BlackHole({
   const [failed, setFailed] = useState<FallbackReason | null>(null);
   const [ready, setReady] = useState(false);
 
+  // Defer all visual work (WebGL probe, caches, first frame) until the
+  // browser is idle, so the text the user came for paints first.
+  const [started, setStarted] = useState(false);
   useEffect(() => {
+    const go = () => setStarted(true);
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(go, { timeout: 1200 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = window.setTimeout(go, 300);
+    return () => window.clearTimeout(id);
+  }, []);
+
+  useEffect(() => {
+    if (!started) return;
     if (variant === "idle") return; // never needs WebGL; skip the probe
     // Probing WebGL needs the DOM, so it runs after mount.
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -47,7 +61,7 @@ export function BlackHole({
       tier: getDeviceTier(readDeviceEnv()),
       maxDpr: window.matchMedia("(pointer: coarse)").matches ? 1.5 : 2,
     });
-  }, [variant]);
+  }, [variant, started]);
 
   const plan = planRender({
     tier: device?.tier ?? "none",
@@ -67,27 +81,31 @@ export function BlackHole({
       data-render-mode={useWebgl ? "webgl" : "canvas"}
       data-animate={plan.animate}
       data-fallback-reason={failed ?? undefined}
-      className={`pointer-events-none relative ${className ?? ""}`}
+      className={`pointer-events-none relative transition-opacity duration-1000 ${started ? "opacity-100" : "opacity-0"} ${className ?? ""}`}
     >
-      {useWebgl && device ? (
+      {!started ? null : (
         <>
-          {/* Keep the 2D version up until the WebGL scene has drawn. */}
-          {!ready && fallback}
-          <SceneErrorBoundary
-            fallback={fallback}
-            onError={() => setFailed("error")}
-          >
-            <Scene
-              percentLived={visualPercent}
-              animate={plan.animate}
-              maxDpr={device.maxDpr}
-              onReady={() => setReady(true)}
-              onFallback={setFailed}
-            />
-          </SceneErrorBoundary>
+          {useWebgl && device ? (
+            <>
+              {/* Keep the 2D version up until the WebGL scene has drawn. */}
+              {!ready && fallback}
+              <SceneErrorBoundary
+                fallback={fallback}
+                onError={() => setFailed("error")}
+              >
+                <Scene
+                  percentLived={visualPercent}
+                  animate={plan.animate}
+                  maxDpr={device.maxDpr}
+                  onReady={() => setReady(true)}
+                  onFallback={setFailed}
+                />
+              </SceneErrorBoundary>
+            </>
+          ) : (
+            fallback
+          )}
         </>
-      ) : (
-        fallback
       )}
     </div>
   );

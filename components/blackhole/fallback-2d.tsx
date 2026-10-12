@@ -44,11 +44,26 @@ export function Fallback2D({
       raf = requestAnimationFrame(frame);
     };
 
+    // Start animating once the page is idle after load, so the first
+    // render and hydration aren't competing with canvas frames.
+    let ready = false;
+    let idleHandle = 0;
     const start = () => {
-      if (!animate || !visible || raf) return;
+      if (!animate || !visible || raf || !ready) return;
       last = performance.now();
       raf = requestAnimationFrame(frame);
     };
+    const whenIdle = () => {
+      ready = true;
+      start();
+    };
+    // Safari < 18 has no requestIdleCallback.
+    const hasIdle = typeof window.requestIdleCallback === "function";
+    if (hasIdle) {
+      idleHandle = window.requestIdleCallback(whenIdle, { timeout: 2500 });
+    } else {
+      idleHandle = window.setTimeout(whenIdle, 1200);
+    }
     const stop = () => {
       cancelAnimationFrame(raf);
       raf = 0;
@@ -67,6 +82,8 @@ export function Fallback2D({
 
     return () => {
       stop();
+      if (hasIdle) window.cancelIdleCallback(idleHandle);
+      else window.clearTimeout(idleHandle);
       ro.disconnect();
       io.disconnect();
     };

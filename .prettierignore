@@ -7,3 +7,5 @@ playwright-report/
 test-results/
 PROMPT.md
 AGENTS.md
+lighthouse-reports/
+public/data/

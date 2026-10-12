@@ -12,7 +12,12 @@
  *
  * Runs on Node's built-in TypeScript type stripping (Node >= 22.18).
  */
-import { createReadStream, existsSync, writeFileSync } from "node:fs";
+import {
+  createReadStream,
+  existsSync,
+  mkdirSync,
+  writeFileSync,
+} from "node:fs";
 import { createInterface } from "node:readline";
 import { createGunzip } from "node:zlib";
 
@@ -20,6 +25,8 @@ export const SOURCE_URL =
   "https://population.un.org/wpp/assets/Excel%20Files/1_Indicator%20(Standard)/CSV_FILES/WPP2024_Life_Table_Abridged_Medium_2024-2100.csv.gz";
 const RAW_PATH = "data/raw/WPP2024_Life_Table_Abridged_Medium_2024-2100.csv.gz";
 const OUT_PATH = "data/life-tables.json";
+/** Served copy the app fetches at runtime (see lib/life-expectancy.ts). */
+const PUBLIC_PATH = `public/data/life-tables-${2026}.json`;
 
 /** Period life table year. The current calendar year at build time (see data/README.md). */
 const TABLE_YEAR = 2026;
@@ -202,6 +209,8 @@ async function main(): Promise<void> {
   };
 
   writeFileSync(OUT_PATH, JSON.stringify(output) + "\n");
+  mkdirSync("public/data", { recursive: true });
+  writeFileSync(PUBLIC_PATH, JSON.stringify(output));
   console.log(
     `Wrote ${OUT_PATH}: ${locations.size} locations, year ${TABLE_YEAR}.`,
   );

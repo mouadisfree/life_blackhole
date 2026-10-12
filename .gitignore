@@ -33,3 +33,6 @@ playwright/.cache/
 
 # raw source downloads (regenerate with scripts/build-life-tables.ts)
 data/raw/
+
+# lighthouse output
+lighthouse-reports/

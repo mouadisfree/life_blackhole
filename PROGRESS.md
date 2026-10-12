@@ -11,8 +11,8 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 | 3 — Core flow              | Done 2026-10-12 (approved)          |
 | 4 — The black hole         | Done 2026-10-12 (approved)          |
 | 5 — Life in weeks + polish | Done 2026-10-12 (approved)          |
-| 6 — Share                  | Done 2026-10-12 — awaiting approval |
-| 7 — Launch prep            | Not started                         |
+| 6 — Share                  | Done 2026-10-12 (approved)          |
+| 7 — Launch prep            | Done 2026-10-12 — awaiting approval |
 | 8 — Deploy                 | Not started                         |
 
 ## Done
@@ -77,9 +77,24 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 - 2D renderer refactored into `components/blackhole/draw-2d.ts`: smoother disk (thin streaks, continuous variation), cached lensed arcs with conic-gradient fade, optional `zoom` / `soft` (one blur per disk half — share cards only; the live fallback stays at 60 fps).
 - Tests: 104 Vitest (+ share content, defaults, formats, file names, calendar date), 42 Playwright (+ Web Share called with a PNG, download fallback, birth date off by default, no network requests while sharing).
 
+### Phase 7 — Launch prep (2026-10-12)
+
+- SEO: `app/sitemap.ts` (public pages only), `app/robots.ts` (personal pages + `/api/` disallowed, `/api/og` allowed), `metadataBase`, Open Graph + Twitter card, WebApplication JSON-LD on the landing page. Personal pages stay `noindex`.
+- Icons: one SVG source → `app/icon.svg`, `app/favicon.ico` (16+32), `app/apple-icon.png`, `public/icons/` 192/512/maskable (`pnpm icons`). `app/manifest.ts` (installable; no service worker — offline is V2).
+- Performance work (Lighthouse mobile):
+  - 2D disk pre-rendered into 8 cached layers rotated per frame (~16 draws instead of ~2,500 fills); lensed arcs cached.
+  - Canvas animation and the WebGL probe start when the browser is idle; the black hole fades in after the text.
+  - Life tables served as static JSON (`public/data/life-tables-2026.json`, written by `pnpm data:build`) and preloaded from the page HTML; a test keeps it identical to `data/`.
+  - Page transition no longer starts from opacity 0 (it hid content from LCP); loading state fills the viewport (no layout shift).
+  - Fixed a console error: drawing before layout (0×0 canvas).
+- Results (`pnpm lighthouse`, mobile preset, production build): `/` 99·100·100·100, `/about` 100·100·100·100, `/horizon` 95·100·100·(noindex), `/weeks` 100·100·100·(noindex) — perf · a11y · best practices · SEO.
+- Full-journey Playwright test (landing → horizon → weeks → share → about → settings → delete); 106 Vitest, 42 Playwright.
+- README with setup, scripts, layout and Vercel deploy steps.
+- Not possible here: real-device checks (no Xcode for the iOS Simulator, no Android device) — see launch checklist in Phase 8.
+
 ## Next
 
-- Phase 7: SEO (sitemap, robots, favicon set, manifest), Lighthouse audit to ≥ 90 / 95 / 95 on mobile, full end-to-end flow test, README with setup + deploy steps, real-device checks (iPhone Safari, Android Chrome).
+- Phase 8: deploy to Vercel (GitHub repo, `NEXT_PUBLIC_SITE_URL`, custom domain), real-device checks on iPhone Safari and Android Chrome, Vercel Analytics only if approved, launch checklist.
 
 ## Decisions
 
@@ -194,3 +209,15 @@ It renders the same generic image for every request, so even a hand-crafted URL 
 ### D27 — Blur only where it's affordable (2026-10-12)
 
 Canvas `filter: blur()` per fill froze the page (~2,500 fills/frame). The live fallback runs without blur; share cards (rendered once) blur each disk half in a single offscreen composite.
+
+### D28 — SEO target applies to indexable pages only (2026-10-12)
+
+`/horizon`, `/weeks` and `/settings` are personal and `noindex`; Lighthouse scores them SEO 63 for exactly that reason. The ≥ 95 SEO target is enforced on `/` and `/about`.
+
+### D29 — Visuals defer to text on first load (2026-10-12)
+
+The black hole (WebGL probe, caches, first frame) starts on `requestIdleCallback` and fades in, so counters and headlines are the Largest Contentful Paint. Horizon LCP went from 3.0 s to 1.2 s on Lighthouse's throttled mobile profile.
+
+### D30 — Life tables fetched as static JSON (2026-10-12)
+
+`JSON.parse` of a fetched file is cheaper than evaluating a 100 KB JS module, and a `<link rel="preload">` lets it download with the HTML. `data/life-tables.json` stays the source of truth (tests, About page); `public/data/` is a generated copy.
