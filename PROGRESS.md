@@ -9,8 +9,8 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 | 1 — Setup & plan           | Done 2026-10-12 (approved)          |
 | 2 — Life math & data       | Done 2026-10-12 (approved)          |
 | 3 — Core flow              | Done 2026-10-12 (approved)          |
-| 4 — The black hole         | Done 2026-10-12 — awaiting approval |
-| 5 — Life in weeks + polish | Not started                         |
+| 4 — The black hole         | Done 2026-10-12 (approved)          |
+| 5 — Life in weeks + polish | Done 2026-10-12 — awaiting approval |
 | 6 — Share                  | Not started                         |
 | 7 — Launch prep            | Not started                         |
 | 8 — Deploy                 | Not started                         |
@@ -58,9 +58,19 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 - Horizon screen: full-bleed scene replaces the progress ring; % lived + thin progress bar below. Landing uses the 2D idle black hole.
 - Tests: 87 Vitest (+ device tiers, render plan, params, error boundary), 16 Playwright (+ 2D on landing, painted canvas on horizon, WebGL unavailable → 2D, OS reduced motion, in-app override).
 
+### Phase 5 — Life in weeks + polish (2026-10-12)
+
+- `lib/weeks.ts`: birthday-aligned grid (one row per year of age, 52 weeks per row, last row partial), current week, lived count. `/weeks` draws ~4,000 dots on one canvas with a pulsing DOM dot for this week, age labels every 10 years, legend, and a text summary/figcaption for screen readers. RTL-aware.
+- Birthday bonus (D2 follow-up): `lib/birthday.ts` shows it for 7 days after each birthday until dismissed (`birthdayBonusSeenAge` in the store); amount from `getBirthdayBonus`, phrased in days (< 2 weeks) or weeks. Animated card on the Horizon screen.
+- Motion (`motion/react`): slow "pull-in" page transition for app pages (`app/(app)/template.tsx`), staggered perspective cards; `MotionProvider` maps the in-app setting to `MotionConfig.reducedMotion`.
+- About page (`/about`, static, indexable): what the numbers mean, method (incl. yearly step and bonus time), data source + citation + licence note (read from the JSON at build time), perspective assumptions, privacy, "This is an average. You are not.", wellbeing note.
+- Copy pass across `messages/en.json`; weekends line on Horizon ("You have about 2,567 weekends left. Make them count."); site footer (About · Life in weeks · Settings · data credit); weeks icon in the header; About link on the landing page.
+- Accessibility: axe (WCAG 2.2 AA tags) clean on landing, horizon, weeks, settings, about on WebKit + Chromium; keyboard-only landing flow; labelled nav landmarks; screen-reader summaries for counters and the grid.
+- Tests: 98 Vitest, 36 Playwright.
+
 ## Next
 
-- Phase 5: life-in-weeks grid, animations (motion), copywriting pass, About page with sources, wellbeing note, birthday-bonus moment (D2), accessibility pass.
+- Phase 6: `/api/og` (generic only), client-side 9:16 + 1:1 share cards (mini black hole, % lived, remaining time, URL), Web Share API with download fallback, privacy toggles (birth date off by default).
 
 ## Decisions
 
@@ -159,3 +169,11 @@ All shader materials are additive (colour = emitted light). Writing alpha into a
 ### D23 — Reduced motion = a still frame, same renderer (2026-10-12)
 
 Users who reduce motion still get the full-quality image, just frozen. The "too slow" fallback only fires while the page is visible, so throttled background tabs don't get stuck on 2D.
+
+### D24 — Weeks grid rows start on birthdays (2026-10-12)
+
+The classic "life in weeks" layout: 52 dots per row, one row per year of age, so the grid lines up with the age people feel. The 1–2 leftover days each year fold into week 52; the total is therefore a few weeks below the calendar-week count, which doesn't change the picture.
+
+### D25 — Birthday bonus window: 7 days, once per age (2026-10-12)
+
+People don't open the app every day, so the moment waits up to a week after the birthday and is dismissed per age.

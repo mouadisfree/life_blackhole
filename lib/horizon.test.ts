@@ -35,3 +35,27 @@ describe("computeHorizon", () => {
     ).toEqual({ ok: false, reason: "future" });
   });
 });
+
+describe("computeHorizon extras", () => {
+  const profile = {
+    birth: { date: "1996-10-10", timeZone: "UTC" },
+    sex: "unspecified" as const,
+  };
+
+  it("includes the weeks grid", () => {
+    const h = computeHorizon(profile, data, now);
+    if (!h.ok) throw new Error(h.reason);
+    expect(h.weeks.current?.row).toBe(30);
+    expect(h.weeks.livedWeeks).toBeLessThan(h.weeks.totalWeeks);
+  });
+
+  it("offers the birthday bonus in the week after a birthday, until seen", () => {
+    const h = computeHorizon(profile, data, now);
+    if (!h.ok) throw new Error(h.reason);
+    expect(h.birthdayBonus?.age).toBe(30);
+    expect(h.birthdayBonus?.ms).toBeGreaterThan(0);
+    const seen = computeHorizon(profile, data, now, 30);
+    if (!seen.ok) throw new Error(seen.reason);
+    expect(seen.birthdayBonus).toBeNull();
+  });
+});

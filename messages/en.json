@@ -3,21 +3,28 @@
     "title": "Life Blackhole",
     "description": "Watch your time fall into the black hole. Then go do something with what's left.",
     "horizonTitle": "Your horizon",
-    "settingsTitle": "Settings"
+    "settingsTitle": "Settings",
+    "weeksTitle": "Your life in weeks",
+    "aboutTitle": "About",
+    "aboutDescription": "What the numbers mean, where they come from, and why nothing leaves your device."
   },
   "Nav": {
     "home": "Life Blackhole",
     "horizon": "Horizon",
     "settings": "Settings",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "weeks": "Life in weeks",
+    "about": "About",
+    "primary": "Main"
   },
   "Landing": {
     "eyebrow": "Life Blackhole",
     "headline": "Every second, a little more of you falls in.",
-    "subline": "Enter your birth date to see how much of your time has crossed the horizon — and how much is still orbiting.",
+    "subline": "Enter your birth date. See how much of your time has crossed the horizon — and how much is still in orbit.",
     "returning": "Your horizon is waiting.",
     "returnCta": "Return to your horizon",
-    "privacy": "Your birth date never leaves this device."
+    "privacy": "Your birth date never leaves this device.",
+    "aboutLink": "How this works"
   },
   "BirthForm": {
     "birthDate": "Birth date",
@@ -59,7 +66,15 @@
     "world": "the world",
     "editDetails": "Edit details",
     "percentLivedCaption": "of an average life lived",
-    "title": "Your horizon"
+    "title": "Your horizon",
+    "weekendsLine": "You have about {count, number} weekends left. Make them count.",
+    "weeksLink": "See your life in weeks",
+    "bonusMomentTitle": "Happy birthday.",
+    "bonusMomentNote": "That's how averages work: every year you live, the odds shift in your favour.",
+    "bonusMomentDismiss": "Thanks",
+    "sourceLink": "How we calculate this",
+    "bonusMomentDays": "Surviving another year moved your horizon back by about {count, plural, one {# day} other {# days}}.",
+    "bonusMomentWeeks": "Surviving another year moved your horizon back by about {count, plural, one {# week} other {# weeks}}."
   },
   "Units": {
     "years": "{count, plural, one {year} other {years}}",
@@ -129,5 +144,47 @@
   },
   "Wellbeing": {
     "note": "If thinking about time feels heavy right now, it's okay to close this and talk to someone you trust."
+  },
+  "Weeks": {
+    "title": "Your life in weeks",
+    "intro": "Each row is a year, starting on your birthday. Each dot is a week.",
+    "summary": "You've lived {lived, number} weeks. About {remaining, number} remain.",
+    "legendLived": "Lived",
+    "legendNow": "This week",
+    "legendAhead": "Ahead",
+    "yearLabel": "Age {age}",
+    "srGrid": "A grid of {total, number} weeks. {lived, number} are filled in, and you are in week {week} of age {age}.",
+    "line": "Not many dots. Not too few, either.",
+    "loading": "Counting weeks…",
+    "legend": "Legend"
+  },
+  "About": {
+    "title": "About Life Blackhole",
+    "lede": "A quiet reminder that time is finite — so you use it. Not a prediction. Not a diagnosis.",
+    "numbersTitle": "What the numbers mean",
+    "numbersBody": "Your estimate is the average remaining lifetime for people of your age, sex and country today, according to the United Nations. It describes a large group of people, not you. Your habits, health, luck and the decades of medical progress ahead all move your real number.",
+    "methodTitle": "How it's calculated",
+    "methodBody1": "We look up remaining life expectancy at your current age from the UN's period life tables for {year}, interpolating between ages. Someone who is 30 has already survived childhood and youth, so their total is higher than life expectancy at birth.",
+    "methodBody2": "The estimate is fixed for each year of your age and updated on your birthday, when your horizon moves back a little. If you've lived longer than your country's life expectancy at birth, we say so — every day after that is bonus time.",
+    "methodBody3": "Without a country we use the world average; without a sex we use the combined table.",
+    "sourceTitle": "Data source",
+    "sourceBody": "{citation} Abridged life tables, medium variant, {year}. {count, number} countries and areas plus the world average.",
+    "sourceLink": "population.un.org/wpp",
+    "licenseNote": "The 2024 download pages don't state a licence; earlier editions are published under CC BY 3.0 IGO. Credit to UN DESA.",
+    "statsTitle": "The perspective stats",
+    "statsBody": "Weekends, full moons, heartbeats and the rest are rough illustrations using simple averages: about 70 heartbeats and 15 breaths a minute, a third of life asleep, one full moon every 29.5 days, one book a month. They're for perspective, not precision.",
+    "privacyTitle": "Privacy",
+    "privacyBody": "Your birth date and details are stored only in this browser. There's no account, no server and no tracking of personal data. Share images are made on your device, and your birth date is never on them unless you choose. You can delete everything in Settings at any time.",
+    "averageTitle": "This is an average. You are not.",
+    "averageBody": "Use it as a nudge, not a forecast.",
+    "back": "Back to your horizon",
+    "start": "See your horizon"
+  },
+  "Footer": {
+    "about": "About",
+    "settings": "Settings",
+    "weeks": "Life in weeks",
+    "madeWith": "Data: UN World Population Prospects 2024",
+    "nav": "Footer"
   }
 }

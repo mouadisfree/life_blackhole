@@ -45,19 +45,22 @@ test.describe("core flow", () => {
     // Nothing personal in the URL
     expect(page.url()).not.toContain("1996");
 
+    // Header navigation (the footer repeats some links).
+    const nav = page.getByRole("navigation", { name: "Main" });
+
     // Persists across reloads
     await page.reload();
     await expect(remaining).toBeVisible();
 
     // Settings: hide the countdown
-    await page.getByRole("link", { name: "Settings" }).click();
+    await nav.getByRole("link", { name: "Settings" }).click();
     await page.getByRole("switch", { name: "Hide the countdown" }).click();
-    await page.getByRole("link", { name: "Horizon" }).click();
+    await nav.getByRole("link", { name: "Horizon" }).click();
     await expect(page.getByText(/Countdown hidden/)).toBeVisible();
     await expect(remaining).toHaveCount(0);
 
     // Delete everything
-    await page.getByRole("link", { name: "Settings" }).click();
+    await nav.getByRole("link", { name: "Settings" }).click();
     await page.getByRole("button", { name: "Delete all my data" }).click();
     await page.getByRole("button", { name: "Delete everything" }).click();
     await expect(page).toHaveURL(/\/$/);

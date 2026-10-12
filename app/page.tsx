@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { BlackHole } from "@/components/blackhole/black-hole";
 import { LandingEntry } from "@/components/landing/landing-entry";
@@ -29,7 +30,15 @@ export default async function Home() {
 
       <div className="flex w-full max-w-sm flex-col gap-4">
         <LandingEntry />
-        <p className="text-xs text-dust">{t("privacy")}</p>
+        <p className="text-xs text-dust">
+          {t("privacy")}{" "}
+          <Link
+            href="/about"
+            className="rounded-sm underline underline-offset-4 outline-none hover:text-starlight focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            {t("aboutLink")}
+          </Link>
+        </p>
       </div>
     </main>
   );

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
+import { MotionProvider } from "@/components/providers/motion-provider";
 import { getDirection } from "@/i18n/config";
 import "./globals.css";
 
@@ -48,7 +49,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         >
           {t("skipToContent")}
         </a>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <MotionProvider>{children}</MotionProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

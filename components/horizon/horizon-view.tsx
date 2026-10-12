@@ -6,6 +6,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useMemo } from "react";
 import { LiveCounter } from "@/components/counters/live-counter";
 import { BlackHole } from "@/components/blackhole/black-hole";
+import { BirthdayBonus } from "@/components/horizon/birthday-bonus";
 import { ProgressBar } from "@/components/counters/progress-bar";
 import { PerspectiveStats } from "@/components/stats/perspective-stats";
 import { useHydrated } from "@/hooks/use-hydrated";
@@ -21,6 +22,8 @@ export function HorizonView() {
   const hydrated = useHydrated();
   const profile = useAppStore((s) => s.profile);
   const settings = useAppStore((s) => s.settings);
+  const seenBonusAge = useAppStore((s) => s.birthdayBonusSeenAge);
+  const markBonusSeen = useAppStore((s) => s.markBirthdayBonusSeen);
   const data = useLifeTables();
   const now = useNow();
 
@@ -29,8 +32,11 @@ export function HorizonView() {
   }, [hydrated, profile, router]);
 
   const horizon = useMemo(
-    () => (profile && data && now ? computeHorizon(profile, data, now) : null),
-    [profile, data, now],
+    () =>
+      profile && data && now
+        ? computeHorizon(profile, data, now, seenBonusAge)
+        : null,
+    [profile, data, now, seenBonusAge],
   );
 
   if (!horizon) {
@@ -56,7 +62,8 @@ export function HorizonView() {
     );
   }
 
-  const { lifespan, snapshot, stats } = horizon;
+  const { lifespan, snapshot, stats, birthdayBonus } = horizon;
+  const weekendsLeft = stats.find((s) => s.id === "weekendsLeft")?.value;
   const percent = format.number(snapshot.percentLived, {
     minimumFractionDigits: 4,
     maximumFractionDigits: 4,
@@ -80,6 +87,13 @@ export function HorizonView() {
         </div>
       ) : (
         <h1 className="sr-only">{t("title")}</h1>
+      )}
+
+      {birthdayBonus && (
+        <BirthdayBonus
+          ms={birthdayBonus.ms}
+          onDismiss={() => markBonusSeen(birthdayBonus.age)}
+        />
       )}
 
       {/* Full-bleed scene; % lived controls the horizon size and remaining matter. */}
@@ -126,12 +140,31 @@ export function HorizonView() {
         </div>
       )}
 
+      {weekendsLeft !== undefined && weekendsLeft > 0 && (
+        <p className="max-w-xs text-center text-lg text-balance text-starlight">
+          {t("weekendsLine", { count: weekendsLeft })}
+        </p>
+      )}
+
       <PerspectiveStats stats={stats} />
+
+      <Link
+        href="/weeks"
+        className="rounded-full border border-border px-5 py-3 text-sm text-gold outline-none hover:bg-void-raised focus-visible:ring-3 focus-visible:ring-ring/50"
+      >
+        {t("weeksLink")} →
+      </Link>
 
       <div className="flex max-w-md flex-col gap-2 text-center">
         <p className="text-sm text-starlight">{t("averageNote")}</p>
         <p className="text-xs text-dust">
-          {t("source", { location, sex: lifespan.source.sex })}
+          {t("source", { location, sex: lifespan.source.sex })}{" "}
+          <Link
+            href="/about"
+            className="rounded-sm text-dust underline underline-offset-4 outline-none hover:text-starlight focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            {t("sourceLink")}
+          </Link>
         </p>
       </div>
     </div>

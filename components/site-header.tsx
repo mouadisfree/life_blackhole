@@ -1,4 +1,4 @@
-import { Orbit, Settings } from "lucide-react";
+import { Grid3x3, Orbit, Settings } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
@@ -12,13 +12,20 @@ export async function SiteHeader() {
       >
         {t("home")}
       </Link>
-      <nav className="flex items-center gap-1">
+      <nav aria-label={t("primary")} className="flex items-center gap-1">
         <Link
           href="/horizon"
           aria-label={t("horizon")}
           className="grid size-11 place-items-center rounded-full text-dust outline-none hover:text-starlight focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <Orbit aria-hidden="true" className="size-5" />
+        </Link>
+        <Link
+          href="/weeks"
+          aria-label={t("weeks")}
+          className="grid size-11 place-items-center rounded-full text-dust outline-none hover:text-starlight focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          <Grid3x3 aria-hidden="true" className="size-5" />
         </Link>
         <Link
           href="/settings"

@@ -36,18 +36,25 @@ export const DEFAULT_SETTINGS: Settings = {
 type State = {
   profile: Profile | null;
   settings: Settings;
+  /** Age at which the birthday-bonus moment was last dismissed. */
+  birthdayBonusSeenAge: number | null;
 };
 
 type Actions = {
   setProfile: (profile: Profile) => void;
   updateSettings: (patch: Partial<Settings>) => void;
+  markBirthdayBonusSeen: (age: number) => void;
   /** Deletes everything this app stored, in memory and in localStorage. */
   deleteAllData: () => void;
 };
 
 export type AppStore = State & Actions;
 
-const initialState: State = { profile: null, settings: DEFAULT_SETTINGS };
+const initialState: State = {
+  profile: null,
+  settings: DEFAULT_SETTINGS,
+  birthdayBonusSeenAge: null,
+};
 
 export const useAppStore = create<AppStore>()(
   persist(
@@ -56,6 +63,7 @@ export const useAppStore = create<AppStore>()(
       setProfile: (profile) => set({ profile }),
       updateSettings: (patch) =>
         set((s) => ({ settings: { ...s.settings, ...patch } })),
+      markBirthdayBonusSeen: (age) => set({ birthdayBonusSeenAge: age }),
       deleteAllData: () => {
         set({ ...initialState, settings: { ...DEFAULT_SETTINGS } });
         useAppStore.persist.clearStorage();
@@ -65,7 +73,11 @@ export const useAppStore = create<AppStore>()(
       name: STORAGE_KEY,
       version: 1,
       storage: createJSONStorage(() => localStorage),
-      partialize: (s): State => ({ profile: s.profile, settings: s.settings }),
+      partialize: (s): State => ({
+        profile: s.profile,
+        settings: s.settings,
+        birthdayBonusSeenAge: s.birthdayBonusSeenAge,
+      }),
       // Fill in settings added after a user's data was first saved.
       merge: (persisted, current) => {
         const p = (persisted ?? {}) as Partial<State>;
@@ -73,6 +85,7 @@ export const useAppStore = create<AppStore>()(
           ...current,
           profile: p.profile ?? null,
           settings: { ...DEFAULT_SETTINGS, ...p.settings },
+          birthdayBonusSeenAge: p.birthdayBonusSeenAge ?? null,
         };
       },
     },
