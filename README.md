@@ -1,5 +1,7 @@
 # Life Blackhole
 
+the link : https://life-blackhole.vercel.app/
+
 > Watch your time fall into the black hole. Then go do something with what's left.
 
 A calm, cinematic memento mori. Enter your birth date and see — live, to the second — how much of an average life you've lived and roughly how much is left, visualised as a black hole slowly pulling your time in.
