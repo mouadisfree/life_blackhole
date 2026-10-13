@@ -16,7 +16,7 @@ import {
 import { computePerspectiveStats } from "@/lib/perspective-stats";
 
 const fieldClass =
-  "rounded-md border border-input bg-void-raised px-3 py-2 text-starlight";
+  "rounded-md border border-input bg-sky-deep px-3 py-2 text-ink";
 
 export function DebugPanel() {
   const [data, setData] = useState<LifeTableData | null>(null);
@@ -88,7 +88,7 @@ export function DebugPanel() {
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-10">
       <h1 className="text-2xl font-semibold">Life math debug</h1>
       <form className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <label className="flex flex-col gap-1 text-sm text-dust">
+        <label className="flex flex-col gap-1 text-sm text-haze">
           Birth date
           <input
             type="date"
@@ -97,7 +97,7 @@ export function DebugPanel() {
             onChange={(e) => setDate(e.target.value)}
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-dust">
+        <label className="flex flex-col gap-1 text-sm text-haze">
           Birth time (optional)
           <input
             type="time"
@@ -106,7 +106,7 @@ export function DebugPanel() {
             onChange={(e) => setTime(e.target.value)}
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-dust">
+        <label className="flex flex-col gap-1 text-sm text-haze">
           Country
           <select
             className={fieldClass}
@@ -121,7 +121,7 @@ export function DebugPanel() {
             ))}
           </select>
         </label>
-        <label className="flex flex-col gap-1 text-sm text-dust">
+        <label className="flex flex-col gap-1 text-sm text-haze">
           Sex
           <select
             className={fieldClass}
@@ -133,7 +133,7 @@ export function DebugPanel() {
             <option value="male">Male</option>
           </select>
         </label>
-        <label className="flex flex-col gap-1 text-sm text-dust sm:col-span-2">
+        <label className="flex flex-col gap-1 text-sm text-haze sm:col-span-2">
           Time zone
           <input
             className={fieldClass}
@@ -142,7 +142,7 @@ export function DebugPanel() {
           />
         </label>
       </form>
-      <pre className="overflow-x-auto rounded-lg bg-void-raised p-4 counter text-xs leading-relaxed text-starlight">
+      <pre className="overflow-x-auto rounded-lg bg-sky-deep p-4 counter text-xs leading-relaxed text-ink">
         {JSON.stringify(output, null, 2)}
       </pre>
     </main>

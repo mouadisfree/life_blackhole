@@ -2,63 +2,70 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* The app is dark-only; <html> always carries .dark so shadcn's dark: styles apply. */
+/*
+ * Light-on-sky UI: native controls and shadcn's dark: styles are the ones
+ * designed for light text, so <html> keeps the .dark class.
+ */
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Brand palette (PROMPT.md §6). Raw values live here; everything else
- * references these tokens.
+ * Sky palette (PROGRESS.md D32). Raw values live here (and in lib/palette.ts
+ * for canvas/WebGL); everything else references these tokens.
+ * Contrast: white ≥ 5.4:1 and --haze ≥ 4.8:1 anywhere on the sky gradient.
  */
 :root {
-  --void: #05050a;
-  --void-raised: #0d0d16;
-  --void-line: #1c1b2b;
+  --sky-top: #0a5aa8;
+  --sky: #0b5fae;
+  --sky-bottom: #0e6bc2;
+  --sky-deep: #084985;
+  --sky-line: #4a8fd3;
 
-  --ember: #ff6b1a;
-  --gold: #ffb347;
-  --flare: #fff4e0;
+  --cloud: #ffffff;
+  --mist: #d9f3ff;
+  --halo: #f2fbff;
+  --cyan: #9ed8ff;
 
-  --violet: #8b7bff;
-  --nebula: #2a2f7a;
+  --ink: #ffffff;
+  --haze: #e3f7ff;
+  --horizon: #04203d;
 
-  --starlight: #eeebf3;
-  --dust: #9d99ad; /* ≥ 7:1 on --void */
-
-  /* shadcn semantic tokens, mapped onto the brand palette */
-  --background: var(--void);
-  --foreground: var(--starlight);
-  --card: var(--void-raised);
-  --card-foreground: var(--starlight);
-  --popover: var(--void-raised);
-  --popover-foreground: var(--starlight);
-  --primary: var(--gold);
-  --primary-foreground: var(--void);
-  --secondary: var(--void-line);
-  --secondary-foreground: var(--starlight);
-  --muted: var(--void-line);
-  --muted-foreground: var(--dust);
-  --accent: var(--nebula);
-  --accent-foreground: var(--starlight);
-  --destructive: #ff5a5f;
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: var(--violet);
+  /* shadcn semantic tokens, mapped onto the sky palette */
+  --background: var(--sky);
+  --foreground: var(--ink);
+  --card: var(--sky-deep);
+  --card-foreground: var(--ink);
+  --popover: var(--sky-deep);
+  --popover-foreground: var(--ink);
+  --primary: var(--cloud);
+  --primary-foreground: var(--sky-top);
+  --secondary: var(--sky-deep);
+  --secondary-foreground: var(--ink);
+  --muted: var(--sky-deep);
+  --muted-foreground: var(--haze);
+  --accent: var(--sky-deep);
+  --accent-foreground: var(--ink);
+  --destructive: #b42318; /* white text on it: 6.6:1 */
+  --border: oklch(1 0 0 / 22%);
+  --input: oklch(1 0 0 / 30%);
+  --ring: var(--cloud);
   --radius: 0.75rem;
 
   color-scheme: dark;
 }
 
 @theme inline {
-  --color-void: var(--void);
-  --color-void-raised: var(--void-raised);
-  --color-void-line: var(--void-line);
-  --color-ember: var(--ember);
-  --color-gold: var(--gold);
-  --color-flare: var(--flare);
-  --color-violet: var(--violet);
-  --color-nebula: var(--nebula);
-  --color-starlight: var(--starlight);
-  --color-dust: var(--dust);
+  --color-sky-top: var(--sky-top);
+  --color-sky: var(--sky);
+  --color-sky-bottom: var(--sky-bottom);
+  --color-sky-deep: var(--sky-deep);
+  --color-sky-line: var(--sky-line);
+  --color-cloud: var(--cloud);
+  --color-mist: var(--mist);
+  --color-halo: var(--halo);
+  --color-cyan: var(--cyan);
+  --color-ink: var(--ink);
+  --color-haze: var(--haze);
+  --color-horizon: var(--horizon);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -93,10 +100,11 @@
   --ease-gravity: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-infall: cubic-bezier(0.7, 0, 0.84, 0);
 
-  --animate-orbit: orbit 24s linear infinite;
-  @keyframes orbit {
+  --animate-drift-slow: drift 260s linear infinite;
+  --animate-drift-fast: drift 150s linear infinite;
+  @keyframes drift {
     to {
-      transform: rotate(360deg);
+      transform: translate3d(-50%, 0, 0);
     }
   }
 }
@@ -109,7 +117,14 @@
     @apply bg-background font-sans text-foreground;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    /* Transparent: the gradient + clouds are a fixed layer (SkyBackground)
+       painted between <html>'s solid fallback and the content. A body
+       background would cover it (background-attachment: fixed is also
+       ignored on iOS, hence the layer). */
+    background: transparent;
+    /* Keeps light text crisp where it passes over a cloud. */
+    text-shadow: 0 1px 2px rgb(4 32 61 / 0.35);
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {

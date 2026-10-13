@@ -24,7 +24,7 @@ export function PerspectiveStats({ stats }: { stats: PerspectiveValue[] }) {
         <h2 id="perspective-title" className="text-lg font-semibold">
           {th("perspectiveTitle")}
         </h2>
-        <p className="text-xs text-dust">{t("estimateNote")}</p>
+        <p className="text-xs text-haze">{t("estimateNote")}</p>
       </div>
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {stats.map((s, i) => {
@@ -32,7 +32,7 @@ export function PerspectiveStats({ stats }: { stats: PerspectiveValue[] }) {
           return (
             <motion.li
               key={s.id}
-              className="flex flex-col gap-1 rounded-xl border border-border bg-void-raised/70 p-4"
+              className="flex flex-col gap-1 rounded-xl border border-border bg-sky-deep/70 p-4"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "0px 0px -10% 0px" }}
@@ -42,8 +42,8 @@ export function PerspectiveStats({ stats }: { stats: PerspectiveValue[] }) {
                 ease: [0.65, 0, 0.35, 1],
               }}
             >
-              <span className="counter text-xl font-medium text-starlight">
-                <span aria-hidden="true" className="me-1 text-base text-dust">
+              <span className="counter text-xl font-medium text-ink">
+                <span aria-hidden="true" className="me-1 text-base text-haze">
                   ≈
                 </span>
                 {s.value >= COMPACT_FROM ? (
@@ -60,8 +60,8 @@ export function PerspectiveStats({ stats }: { stats: PerspectiveValue[] }) {
                   format.number(s.value)
                 )}
               </span>
-              <span className="text-sm text-starlight">{t(`${id}.label`)}</span>
-              <span className="text-xs text-dust">{t(`${id}.assumption`)}</span>
+              <span className="text-sm text-ink">{t(`${id}.label`)}</span>
+              <span className="text-xs text-haze">{t(`${id}.assumption`)}</span>
             </motion.li>
           );
         })}

@@ -19,8 +19,8 @@ function Section({
 }) {
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold text-starlight">{title}</h2>
-      <div className="flex flex-col gap-3 text-pretty text-dust">
+      <h2 className="text-lg font-semibold text-ink">{title}</h2>
+      <div className="flex flex-col gap-3 text-pretty text-haze">
         {children}
       </div>
     </section>
@@ -42,7 +42,7 @@ export default async function AboutPage() {
       >
         <header className="flex flex-col gap-3">
           <h1 className="text-3xl font-semibold text-balance">{t("title")}</h1>
-          <p className="text-lg text-pretty text-starlight">{t("lede")}</p>
+          <p className="text-lg text-pretty text-ink">{t("lede")}</p>
         </header>
 
         <Section title={t("numbersTitle")}>
@@ -64,7 +64,7 @@ export default async function AboutPage() {
             })}{" "}
             <a
               href={source.url}
-              className="rounded-sm text-gold underline underline-offset-4 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="rounded-sm text-mist underline underline-offset-4 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
               rel="noopener noreferrer"
               target="_blank"
             >
@@ -82,11 +82,11 @@ export default async function AboutPage() {
           <p>{t("privacyBody")}</p>
         </Section>
 
-        <section className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-void-raised/60 p-6 text-center">
-          <h2 className="text-xl font-semibold text-gold">
+        <section className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-sky-deep/60 p-6 text-center">
+          <h2 className="text-xl font-semibold text-mist">
             {t("averageTitle")}
           </h2>
-          <p className="text-dust">{t("averageBody")}</p>
+          <p className="text-haze">{t("averageBody")}</p>
           <Link
             href="/horizon"
             className="mt-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
@@ -95,7 +95,7 @@ export default async function AboutPage() {
           </Link>
         </section>
 
-        <p className="text-center text-xs text-dust">{tw("note")}</p>
+        <p className="text-center text-xs text-haze">{tw("note")}</p>
       </main>
       <SiteFooter />
     </>

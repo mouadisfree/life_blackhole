@@ -34,6 +34,7 @@ Next.js 16 (App Router, Turbopack, Cache Components) · React 19.3 · TypeScript
 - **All date/life math lives in pure functions in `lib/`**, with colocated `*.test.ts`. Components never do date arithmetic.
 - Never fake data. Any number derived from a dataset must cite the source in code and on the About page.
 - All user-facing copy goes through next-intl (`messages/en.json`). Use logical CSS (`ms-`, `me-`, `ps-`, `pe-`, `start`, `end`) — RTL is coming.
+- Colours: use the sky tokens (`sky`, `sky-deep`, `sky-line`, `cloud`, `mist`, `cyan`, `halo`, `ink`, `haze`, `horizon`) — Tailwind classes or `lib/palette.ts` in canvas/WebGL. Keep text ≥ 4.5:1 on the sky gradient (see PROGRESS.md D32).
 - Counters use the mono font with `tabular-nums`. Live counters are `aria-live="off"`; provide a separate readable summary.
 - Respect `prefers-reduced-motion` and the in-app reduced-motion setting.
 

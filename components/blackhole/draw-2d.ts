@@ -3,6 +3,12 @@
  * cards. Pure drawing: no React, no timers.
  */
 import { blackHoleParams } from "@/lib/blackhole-params";
+import { PALETTE, rgb } from "@/lib/palette";
+
+// Disk ramp: cloud white → mist → sky cyan (same as the WebGL shaders).
+const HOT = rgb(PALETTE.cloud);
+const MID = rgb(PALETTE.mist);
+const COOL = rgb(PALETTE.cyan);
 
 /** Vertical squash of the disk ellipse (viewing angle). */
 const TILT = 0.2;
@@ -47,9 +53,9 @@ function lensedArcs(
   const cx = w / 2;
   const cy = h / 2;
   const g = c.createRadialGradient(cx, cy, rh * 1.1, cx, cy, rh * 1.6);
-  g.addColorStop(0, `rgba(255,244,224,${0.9 * matter})`);
-  g.addColorStop(0.35, `rgba(255,179,71,${0.7 * matter})`);
-  g.addColorStop(1, "rgba(255,107,26,0)");
+  g.addColorStop(0, `rgba(${HOT},${0.9 * matter})`);
+  g.addColorStop(0.35, `rgba(${MID},${0.7 * matter})`);
+  g.addColorStop(1, `rgba(${COOL},0)`);
   c.strokeStyle = g;
   c.globalAlpha = 0.9;
   c.lineWidth = rh * 0.32;
@@ -110,9 +116,9 @@ function diskLayers(inner: number, outer: number, matter: number) {
     if (!c) return null;
     c.translate(size / 2, size / 2);
     const g = c.createRadialGradient(0, 0, inner, 0, 0, outer);
-    g.addColorStop(0, `rgba(255,244,224,${0.9 * matter})`);
-    g.addColorStop(0.35, `rgba(255,179,71,${0.7 * matter})`);
-    g.addColorStop(1, "rgba(255,107,26,0)");
+    g.addColorStop(0, `rgba(${HOT},${0.9 * matter})`);
+    g.addColorStop(0.35, `rgba(${MID},${0.7 * matter})`);
+    g.addColorStop(1, `rgba(${COOL},0)`);
     c.fillStyle = g;
     for (let j = 0; j < BANDS_PER_LAYER; j++) {
       const b = l * BANDS_PER_LAYER + j;
@@ -176,16 +182,16 @@ export function drawBlackHole(
   // Ambient glow.
   // Fade out inside the canvas so no rectangular edge shows.
   const glow = ctx.createRadialGradient(cx, cy, rh, cx, cy, Math.min(w, h) / 2);
-  glow.addColorStop(0, `rgba(255,107,26,${0.32 * p.matter})`);
-  glow.addColorStop(1, "rgba(255,107,26,0)");
+  glow.addColorStop(0, `rgba(${COOL},${0.32 * p.matter})`);
+  glow.addColorStop(1, `rgba(${COOL},0)`);
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, w, h);
 
   const ring = (x: number, y: number, r0: number, r1: number) => {
     const g = ctx.createRadialGradient(x, y, r0, x, y, r1);
-    g.addColorStop(0, `rgba(255,244,224,${0.9 * p.matter})`);
-    g.addColorStop(0.35, `rgba(255,179,71,${0.7 * p.matter})`);
-    g.addColorStop(1, "rgba(255,107,26,0)");
+    g.addColorStop(0, `rgba(${HOT},${0.9 * p.matter})`);
+    g.addColorStop(0.35, `rgba(${MID},${0.7 * p.matter})`);
+    g.addColorStop(1, `rgba(${COOL},0)`);
     return g;
   };
 
@@ -289,14 +295,14 @@ export function drawBlackHole(
 
   // Event horizon (opaque) + photon ring.
   ctx.globalCompositeOperation = "source-over";
-  ctx.fillStyle = "#000";
+  ctx.fillStyle = PALETTE.horizon;
   ctx.beginPath();
   ctx.arc(cx, cy, rh, 0, Math.PI * 2);
   ctx.fill();
   ctx.globalCompositeOperation = "lighter";
-  ctx.strokeStyle = "rgba(255,244,224,0.95)";
+  ctx.strokeStyle = `rgba(${HOT},0.95)`;
   ctx.lineWidth = Math.max(1, rh * 0.035);
-  ctx.shadowColor = "rgba(255,179,71,0.9)";
+  ctx.shadowColor = `rgba(${MID},0.9)`;
   ctx.shadowBlur = rh * 0.25;
   ctx.beginPath();
   ctx.arc(cx, cy, rh * 1.06, 0, Math.PI * 2);
@@ -321,7 +327,8 @@ export function drawBlackHole(
     if (behind) continue;
     const alpha =
       Math.min(life / 0.1, 1) * (1 - Math.max(0, (life - 0.88) / 0.12));
-    ctx.fillStyle = `rgba(255,${Math.round(150 + 90 * life)},${Math.round(60 + 160 * life)},${alpha})`;
+    // Cyan at the edge → white near the horizon.
+    ctx.fillStyle = `rgba(${Math.round(158 + 97 * life)},${Math.round(216 + 39 * life)},255,${alpha})`;
     ctx.beginPath();
     ctx.arc(x, y, 0.4 + q.speed * 0.5, 0, Math.PI * 2);
     ctx.fill();

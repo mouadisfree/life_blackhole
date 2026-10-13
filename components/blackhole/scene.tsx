@@ -1,19 +1,21 @@
 "use client";
 
-import { Billboard, PerformanceMonitor, Stars } from "@react-three/drei";
+import { Billboard, PerformanceMonitor } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  AdditiveBlending,
+  CustomBlending,
   BufferAttribute,
   BufferGeometry,
   Color,
   DoubleSide,
   LinearSRGBColorSpace,
+  OneFactor,
   type PerspectiveCamera,
   type ShaderMaterial,
 } from "three";
 import { blackHoleParams } from "@/lib/blackhole-params";
+import { PALETTE } from "@/lib/palette";
 import {
   diskFragment,
   diskVertex,
@@ -23,19 +25,32 @@ import {
   particlesVertex,
 } from "./shaders";
 
-// Brand tokens (app/globals.css). Stored as raw sRGB values: the shaders
+// Sky palette (lib/palette.ts). Stored as raw sRGB values: the shaders
 // output them directly without colour-space conversion.
 const color = (hex: string) => new Color().setStyle(hex, LinearSRGBColorSpace);
-const HOT = color("#fff4e0");
-const MID = color("#ffb347");
-const COOL = color("#ff6b1a");
+const HOT = color(PALETTE.cloud);
+const MID = color(PALETTE.mist);
+const COOL = color(PALETTE.cyan);
+
+/**
+ * "Light" blending on a transparent canvas: shaders output colour with
+ * alpha = its brightness, and both accumulate (1·src + 1·dst). The page sky
+ * shows through, and bright matter reads as glowing over it.
+ */
+const LIGHT = {
+  blending: CustomBlending,
+  blendSrc: OneFactor,
+  blendDst: OneFactor,
+  blendSrcAlpha: OneFactor,
+  blendDstAlpha: OneFactor,
+} as const;
 
 // Stable objects: inline literals would be re-applied by R3F on every render,
 // resetting the camera that CameraRig positions.
 const CAMERA = { fov: 38, near: 0.1, far: 200, position: [0, 1, 9] as const };
 const GL = {
   antialias: false,
-  alpha: false,
+  alpha: true,
   powerPreference: "high-performance" as const,
 };
 
@@ -207,7 +222,7 @@ function BlackHoleBody({
             uniforms={uniforms.halo}
             transparent
             depthWrite={false}
-            blending={AdditiveBlending}
+            {...LIGHT}
           />
         </mesh>
       </Billboard>
@@ -215,7 +230,7 @@ function BlackHoleBody({
       {/* Event horizon: pure black, writes depth so the far disk hides behind it. */}
       <mesh renderOrder={1}>
         <sphereGeometry args={[params.horizonRadius, 64, 32]} />
-        <meshBasicMaterial color="black" />
+        <meshBasicMaterial color={PALETTE.horizon} />
       </mesh>
 
       {/* Accretion disk in the XZ plane. */}
@@ -229,7 +244,7 @@ function BlackHoleBody({
           transparent
           depthWrite={false}
           side={DoubleSide}
-          blending={AdditiveBlending}
+          {...LIGHT}
         />
       </mesh>
 
@@ -241,7 +256,7 @@ function BlackHoleBody({
           uniforms={uniforms.particles}
           transparent
           depthWrite={false}
-          blending={AdditiveBlending}
+          {...LIGHT}
         />
       </points>
     </group>
@@ -281,9 +296,8 @@ export default function Scene({
         camera={CAMERA}
         gl={GL}
         onCreated={({ gl }) => {
-          // Opaque, matching the page background (--void): additive quads write
-          // alpha, which would otherwise punch dark rectangles into a transparent canvas.
-          gl.setClearColor(0x05050a, 1);
+          // Transparent: the sky and clouds behind the page show through.
+          gl.setClearColor(0x000000, 0);
           gl.domElement.addEventListener("webglcontextlost", (e) => {
             e.preventDefault();
             onFallback("context-lost");
@@ -300,15 +314,6 @@ export default function Scene({
           }}
         />
         <CameraRig diskOuter={params.diskOuter} />
-        <Stars
-          radius={60}
-          depth={40}
-          count={animate ? 1500 : 1000}
-          factor={3}
-          saturation={0}
-          fade
-          speed={animate ? 0.4 : 0}
-        />
         <BlackHoleBody percentLived={percentLived} animate={animate} />
       </Canvas>
     </div>

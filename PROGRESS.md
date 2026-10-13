@@ -241,3 +241,16 @@ The black hole (WebGL probe, caches, first frame) starts on `requestIdleCallback
 ### D31 — No analytics at launch (2026-10-12)
 
 The owner chose to launch with zero third-party requests. Revisit after launch if usage data is needed; Vercel Web Analytics (cookie-less) is the planned option, with a matching line in the About page's privacy section.
+
+### D32 — Sky theme replaces the dark space theme (2026-10-13)
+
+Owner request: black → sky blue, orange → cloud white, plus a sky effect. Supersedes the colour part of PROMPT.md §6 ("Interstellar meets Apple").
+
+- Palette (`app/globals.css`, mirrored in `lib/palette.ts` for canvas/WebGL): sky gradient `#0a5aa8 → #0b5fae → #0e6bc2`, panels `#084985`, text white, muted `#e3f7ff`, accent mist `#d9f3ff`, glow cyan `#9ed8ff`, event horizon deep navy `#04203d`. Tokens renamed (`void→sky`, `gold→cloud`, `ember→mist/cyan`, `starlight→ink`, `dust→haze`).
+- **Why not the photo's exact blue (#1C86E0)?** White text on it is 3.8:1, below WCAG AA. The chosen gradient keeps white ≥ 5.4:1 and muted text ≥ 4.8:1 everywhere; text also gets a soft navy text-shadow for legibility over clouds.
+- The black hole stays dark (deep navy) — a hole in the sky; its disk, photon ring and particles ramp cloud white → mist → cyan. Stars removed (daytime).
+- WebGL canvas is transparent again (reverses D22): shaders output light with alpha = brightness and blend 1·src + 1·dst, so the sky shows through without dark rectangles.
+- Sky effect (`components/sky/`): fixed gradient + two procedural cloud layers (seamless fractal-noise cumulus, lit from above), drifting at two speeds via CSS transforms; still under reduced motion. Generated in idle-time slices (no long tasks), tile sized to the screen's aspect so clouds aren't stretched.
+- Destructive buttons are solid red with white text; form errors are white with an alert icon (red text can't reach AA on blue).
+- Share cards, OG image, weeks grid and icons follow the sky palette.
+- Results: axe clean on all pages; Lighthouse mobile `/` 99, `/about` 100, `/horizon` 98, `/weeks` 100 (a11y and best practices 100).

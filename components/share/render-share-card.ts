@@ -12,13 +12,14 @@ import {
   type ShareCardContent,
   type ShareFormat,
 } from "@/lib/share-card";
+import { PALETTE } from "@/lib/palette";
+import { drawClouds } from "@/components/sky/clouds";
 
 const COLORS = {
-  void: "#05050a",
-  starlight: "#eeebf3",
-  dust: "#9d99ad",
-  gold: "#ffb347",
-  ember: "#ff6b1a",
+  ink: PALETTE.ink,
+  haze: PALETTE.haze,
+  mist: PALETTE.mist,
+  track: "rgba(255,255,255,0.25)",
 };
 
 function fontFamilies() {
@@ -58,16 +59,28 @@ function wrap(
   return lines;
 }
 
-/** Deterministic background stars. */
-function stars(ctx: CanvasRenderingContext2D, w: number, h: number) {
-  let s = 42;
-  const rand = () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646;
-  for (let i = 0; i < 220; i++) {
-    ctx.globalAlpha = 0.15 + rand() * 0.55;
-    ctx.fillStyle = COLORS.starlight;
-    ctx.beginPath();
-    ctx.arc(rand() * w, rand() * h, rand() * 1.6 + 0.3, 0, Math.PI * 2);
-    ctx.fill();
+/** Sky gradient with soft clouds — the same sky as the app. */
+function sky(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  const g = ctx.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, PALETTE.skyTop);
+  g.addColorStop(0.45, PALETTE.sky);
+  g.addColorStop(1, PALETTE.skyBottom);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, w, h);
+  // Small tiles scaled up = soft cloud edges.
+  for (const layer of [
+    { seed: 11, scale: 40, coverage: 0.42, alpha: 0.35 },
+    { seed: 29, scale: 70, coverage: 0.36, alpha: 0.5 },
+  ]) {
+    const tile = document.createElement("canvas");
+    tile.width = 240;
+    tile.height = Math.round((240 * h) / w);
+    const tctx = tile.getContext("2d");
+    if (!tctx) continue;
+    drawClouds(tctx, { width: tile.width, height: tile.height, ...layer });
+    ctx.globalAlpha = layer.alpha;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(tile, 0, 0, w, h);
   }
   ctx.globalAlpha = 1;
 }
@@ -93,9 +106,7 @@ export async function renderShareCard(params: {
   if (!ctx) throw new Error("Canvas 2D unavailable");
 
   // Background
-  ctx.fillStyle = COLORS.void;
-  ctx.fillRect(0, 0, W, H);
-  stars(ctx, W, H);
+  sky(ctx, W, H);
 
   // Black hole (rendered separately, then composited)
   const holeTop = story ? 240 : 80;
@@ -112,11 +123,16 @@ export async function renderShareCard(params: {
     ctx.drawImage(hole, 0, holeTop);
   }
 
+  // Legibility over clouds, as in the app.
+  ctx.shadowColor = "rgba(4,32,61,0.35)";
+  ctx.shadowOffsetY = 2;
+  ctx.shadowBlur = 6;
+
   ctx.textAlign = "center";
   ctx.textBaseline = "alphabetic";
 
   // Brand
-  ctx.fillStyle = COLORS.dust;
+  ctx.fillStyle = COLORS.haze;
   ctx.font = `500 ${story ? 34 : 28}px ${sans}`;
   setSpacing(ctx, story ? 12 : 10);
   ctx.fillText(content.brand, W / 2, story ? 170 : 72);
@@ -125,19 +141,19 @@ export async function renderShareCard(params: {
   let y = holeTop + holeH + (story ? 90 : 40);
 
   if (content.percent) {
-    ctx.fillStyle = COLORS.starlight;
+    ctx.fillStyle = COLORS.ink;
     ctx.font = `500 ${story ? 150 : 104}px ${mono}`;
     ctx.fillText(content.percent.value, W / 2, y + (story ? 110 : 76));
     y += story ? 150 : 100;
     // Progress bar
     const barW = story ? 640 : 560;
     const barX = (W - barW) / 2;
-    ctx.fillStyle = "#1c1b2b";
+    ctx.fillStyle = COLORS.track;
     ctx.fillRect(barX, y, barW, 8);
     const grad = ctx.createLinearGradient(barX, 0, barX + barW, 0);
-    grad.addColorStop(0, "#fff4e0");
-    grad.addColorStop(0.5, COLORS.gold);
-    grad.addColorStop(1, COLORS.ember);
+    grad.addColorStop(0, PALETTE.halo);
+    grad.addColorStop(0.5, PALETTE.cloud);
+    grad.addColorStop(1, PALETTE.cyan);
     ctx.fillStyle = grad;
     ctx.fillRect(
       barX,
@@ -146,7 +162,7 @@ export async function renderShareCard(params: {
       8,
     );
     y += story ? 70 : 54;
-    ctx.fillStyle = COLORS.dust;
+    ctx.fillStyle = COLORS.haze;
     ctx.font = `400 ${story ? 38 : 30}px ${sans}`;
     ctx.fillText(content.percent.caption, W / 2, y);
     y += story ? 110 : 70;
@@ -154,13 +170,13 @@ export async function renderShareCard(params: {
 
   ctx.font = `500 ${story ? 48 : 36}px ${sans}`;
   for (const line of content.lines) {
-    ctx.fillStyle = COLORS.starlight;
+    ctx.fillStyle = COLORS.ink;
     ctx.fillText(line, W / 2, y);
     y += story ? 76 : 54;
   }
 
   // Footer
-  ctx.fillStyle = COLORS.dust;
+  ctx.fillStyle = COLORS.haze;
   ctx.font = `400 ${story ? 36 : 28}px ${sans}`;
   const taglineLines = wrap(ctx, content.tagline, W - 200);
   let fy =
@@ -169,7 +185,7 @@ export async function renderShareCard(params: {
     ctx.fillText(l, W / 2, fy);
     fy += story ? 48 : 38;
   }
-  ctx.fillStyle = COLORS.gold;
+  ctx.fillStyle = COLORS.mist;
   ctx.font = `500 ${story ? 36 : 28}px ${mono}`;
   ctx.fillText(content.host, W / 2, H - (story ? 96 : 44));
 

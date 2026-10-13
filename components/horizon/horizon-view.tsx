@@ -46,7 +46,7 @@ export function HorizonView() {
     return (
       // Fills the screen so the footer starts below the fold: no layout shift on load.
       <p
-        className="flex min-h-svh items-center justify-center text-center text-dust"
+        className="flex min-h-svh items-center justify-center text-center text-haze"
         role="status"
       >
         {t("loading")}
@@ -58,10 +58,10 @@ export function HorizonView() {
     // Stored data no longer valid (e.g. edited by hand) — send them to fix it.
     return (
       <div className="flex flex-col items-center gap-4 py-24 text-center">
-        <p className="text-dust">{t("loading")}</p>
+        <p className="text-haze">{t("loading")}</p>
         <Link
           href="/settings"
-          className="text-gold underline-offset-4 hover:underline"
+          className="text-mist underline-offset-4 hover:underline"
         >
           {t("editDetails")}
         </Link>
@@ -90,7 +90,7 @@ export function HorizonView() {
           <h1 className="text-2xl font-semibold text-balance">
             {t("bonusTitle")}
           </h1>
-          <p className="text-gold">{t("bonusBody")}</p>
+          <p className="text-mist">{t("bonusBody")}</p>
         </div>
       ) : (
         <h1 className="sr-only">{t("title")}</h1>
@@ -113,20 +113,17 @@ export function HorizonView() {
       </div>
 
       <section className="flex w-full max-w-xs flex-col items-center gap-3">
-        <p
-          className="counter text-4xl font-medium text-starlight"
-          aria-hidden="true"
-        >
+        <p className="counter text-4xl font-medium text-ink" aria-hidden="true">
           {percent}%
         </p>
         <ProgressBar percent={snapshot.percentLived} />
-        <p className="text-xs text-dust" aria-hidden="true">
+        <p className="text-xs text-haze" aria-hidden="true">
           {t("percentLivedCaption")}
         </p>
       </section>
 
       {settings.hideCountdown ? (
-        <p className="max-w-xs text-center text-sm text-dust">
+        <p className="max-w-xs text-center text-sm text-haze">
           {t("countdownHidden")}
         </p>
       ) : (
@@ -148,7 +145,7 @@ export function HorizonView() {
       )}
 
       {weekendsLeft !== undefined && weekendsLeft > 0 && (
-        <p className="max-w-xs text-center text-lg text-balance text-starlight">
+        <p className="max-w-xs text-center text-lg text-balance text-ink">
           {t("weekendsLine", { count: weekendsLeft })}
         </p>
       )}
@@ -161,18 +158,18 @@ export function HorizonView() {
 
       <Link
         href="/weeks"
-        className="rounded-full border border-border px-5 py-3 text-sm text-gold outline-none hover:bg-void-raised focus-visible:ring-3 focus-visible:ring-ring/50"
+        className="rounded-full border border-border px-5 py-3 text-sm text-mist outline-none hover:bg-sky-deep focus-visible:ring-3 focus-visible:ring-ring/50"
       >
         {t("weeksLink")} →
       </Link>
 
       <div className="flex max-w-md flex-col gap-2 text-center">
-        <p className="text-sm text-starlight">{t("averageNote")}</p>
-        <p className="text-xs text-dust">
+        <p className="text-sm text-ink">{t("averageNote")}</p>
+        <p className="text-xs text-haze">
           {t("source", { location, sex: lifespan.source.sex })}{" "}
           <Link
             href="/about"
-            className="rounded-sm text-dust underline underline-offset-4 outline-none hover:text-starlight focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="rounded-sm text-haze underline underline-offset-4 outline-none hover:text-ink focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             {t("sourceLink")}
           </Link>

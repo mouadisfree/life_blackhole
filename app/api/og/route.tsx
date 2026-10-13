@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { PALETTE } from "@/lib/palette";
 
 /**
  * Generic link-preview image (1200×630). Deliberately takes no parameters:
@@ -15,14 +16,20 @@ export function GET() {
         alignItems: "center",
         justifyContent: "space-between",
         padding: "0 96px",
-        backgroundColor: "#05050a",
-        backgroundImage:
-          "radial-gradient(circle at 78% 50%, rgba(255,107,26,0.45) 0%, rgba(255,179,71,0.12) 22%, rgba(5,5,10,0) 45%)",
-        color: "#eeebf3",
+        backgroundColor: PALETTE.sky,
+        // Sky gradient, soft cloud puffs, and a white glow behind the hole.
+        backgroundImage: [
+          "radial-gradient(circle at 78% 50%, rgba(255,255,255,0.55) 0%, rgba(158,216,255,0.25) 20%, rgba(255,255,255,0) 40%)",
+          "radial-gradient(ellipse 260px 90px at 12% 16%, rgba(255,255,255,0.4), rgba(255,255,255,0))",
+          "radial-gradient(ellipse 340px 110px at 38% 94%, rgba(255,255,255,0.32), rgba(255,255,255,0))",
+          "radial-gradient(ellipse 220px 70px at 96% 8%, rgba(255,255,255,0.38), rgba(255,255,255,0))",
+          `linear-gradient(180deg, ${PALETTE.skyTop}, ${PALETTE.sky} 45%, ${PALETTE.skyBottom})`,
+        ].join(", "),
+        color: PALETTE.ink,
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", maxWidth: 620 }}>
-        <div style={{ fontSize: 28, letterSpacing: 10, color: "#9d99ad" }}>
+        <div style={{ fontSize: 28, letterSpacing: 10, color: PALETTE.haze }}>
           LIFE BLACKHOLE
         </div>
         <div
@@ -35,7 +42,7 @@ export function GET() {
         >
           Watch your time fall into the black hole.
         </div>
-        <div style={{ fontSize: 32, color: "#ffb347", marginTop: 28 }}>
+        <div style={{ fontSize: 32, color: PALETTE.mist, marginTop: 28 }}>
           Then go do something with what&apos;s left.
         </div>
       </div>
@@ -44,10 +51,10 @@ export function GET() {
           width: 300,
           height: 300,
           borderRadius: 9999,
-          backgroundColor: "#000",
-          border: "6px solid #fff4e0",
+          backgroundColor: PALETTE.horizon,
+          border: `6px solid ${PALETTE.halo}`,
           boxShadow:
-            "0 0 60px 20px rgba(255,179,71,0.75), 0 0 160px 60px rgba(255,107,26,0.45)",
+            "0 0 50px 16px rgba(255,255,255,0.8), 0 0 140px 50px rgba(158,216,255,0.5)",
           display: "flex",
         }}
       />

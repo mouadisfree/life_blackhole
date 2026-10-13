@@ -22,7 +22,7 @@ export function LandingEntry() {
   if (profile) {
     return (
       <div className="flex w-full flex-col items-center gap-4">
-        <p className="text-dust">{t("returning")}</p>
+        <p className="text-haze">{t("returning")}</p>
         <Button
           asChild
           size="lg"

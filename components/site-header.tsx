@@ -8,7 +8,7 @@ export async function SiteHeader() {
     <header className="flex items-center justify-between px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-2">
       <Link
         href="/"
-        className="rounded-md text-sm font-medium tracking-[0.2em] text-dust uppercase outline-none hover:text-starlight focus-visible:ring-3 focus-visible:ring-ring/50"
+        className="rounded-md text-sm font-medium tracking-[0.2em] text-haze uppercase outline-none hover:text-ink focus-visible:ring-3 focus-visible:ring-ring/50"
       >
         {t("home")}
       </Link>
@@ -16,21 +16,21 @@ export async function SiteHeader() {
         <Link
           href="/horizon"
           aria-label={t("horizon")}
-          className="grid size-11 place-items-center rounded-full text-dust outline-none hover:text-starlight focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="grid size-11 place-items-center rounded-full text-haze outline-none hover:text-ink focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <Orbit aria-hidden="true" className="size-5" />
         </Link>
         <Link
           href="/weeks"
           aria-label={t("weeks")}
-          className="grid size-11 place-items-center rounded-full text-dust outline-none hover:text-starlight focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="grid size-11 place-items-center rounded-full text-haze outline-none hover:text-ink focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <Grid3x3 aria-hidden="true" className="size-5" />
         </Link>
         <Link
           href="/settings"
           aria-label={t("settings")}
-          className="grid size-11 place-items-center rounded-full text-dust outline-none hover:text-starlight focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="grid size-11 place-items-center rounded-full text-haze outline-none hover:text-ink focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <Settings aria-hidden="true" className="size-5" />
         </Link>

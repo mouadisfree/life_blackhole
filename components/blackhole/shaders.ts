@@ -1,7 +1,8 @@
 /**
  * GLSL for the black hole. Kept as strings (no loader config needed).
- * Colours come in as uniforms from the design tokens. All materials use
- * additive blending, so fragment colour = emitted light and alpha is 1.
+ * Colours come in as uniforms from the sky palette. Fragment colour is
+ * emitted light; alpha = its brightness (see LIGHT blending in scene.tsx), so
+ * the page's sky shows through a transparent canvas.
  */
 
 const noise = /* glsl */ `
@@ -30,6 +31,9 @@ const noise = /* glsl */ `
     }
     return v;
   }
+  vec4 light(vec3 c) {
+    return vec4(c, clamp(max(max(c.r, c.g), c.b), 0.0, 1.0));
+  }
   mat2 rot(float a) {
     float c = cos(a);
     float s = sin(a);
@@ -37,7 +41,7 @@ const noise = /* glsl */ `
   }
 `;
 
-/** Shared colour ramp: white-hot near the horizon → gold → ember at the edge. */
+/** Shared colour ramp: cloud white near the horizon → mist → sky cyan at the edge. */
 const ramp = /* glsl */ `
   uniform vec3 uHot;
   uniform vec3 uMid;
@@ -82,7 +86,7 @@ export const diskFragment = /* glsl */ `
     float edge = smoothstep(0.0, 0.05, t) * (1.0 - smoothstep(0.7, 1.0, t));
     vec3 col = tempColor(t) * intensity * doppler * uMatter * 0.95;
     // Additive blending: brightness lives in the colour; alpha stays 1.
-    gl_FragColor = vec4(col * edge, 1.0);
+    gl_FragColor = light(col * edge);
   }
 `;
 
@@ -126,7 +130,7 @@ export const haloFragment = /* glsl */ `
 
     float t = clamp((x - 1.0) / 0.9, 0.0, 1.0);
     vec3 col = uHot * photon + tempColor(t + 0.15) * lensed * 1.1 + uCool * glow;
-    gl_FragColor = vec4(col, 1.0);
+    gl_FragColor = light(col);
   }
 `;
 
@@ -164,6 +168,7 @@ export const particlesFragment = /* glsl */ `
     float d = length(gl_PointCoord - 0.5);
     float a = smoothstep(0.5, 0.0, d) * vAlpha;
     if (a < 0.01) discard;
-    gl_FragColor = vec4(mix(uCool, uHot, vHeat) * a, 1.0);
+    vec3 c = mix(uCool, uHot, vHeat) * a;
+    gl_FragColor = vec4(c, clamp(max(max(c.r, c.g), c.b), 0.0, 1.0));
   }
 `;

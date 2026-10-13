@@ -36,22 +36,22 @@ export default async function Home() {
       />
 
       <div className="flex max-w-md flex-col gap-4">
-        <p className="text-sm tracking-[0.3em] text-dust uppercase">
+        <p className="text-sm tracking-[0.3em] text-haze uppercase">
           {t("eyebrow")}
         </p>
         <h1 className="text-3xl font-semibold text-balance sm:text-4xl">
           {t("headline")}
         </h1>
-        <p className="text-pretty text-dust">{t("subline")}</p>
+        <p className="text-pretty text-haze">{t("subline")}</p>
       </div>
 
       <div className="flex w-full max-w-sm flex-col gap-4">
         <LandingEntry />
-        <p className="text-xs text-dust">
+        <p className="text-xs text-haze">
           {t("privacy")}{" "}
           <Link
             href="/about"
-            className="rounded-sm underline underline-offset-4 outline-none hover:text-starlight focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="rounded-sm underline underline-offset-4 outline-none hover:text-ink focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             {t("aboutLink")}
           </Link>

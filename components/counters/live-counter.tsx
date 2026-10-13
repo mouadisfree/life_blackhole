@@ -37,46 +37,46 @@ export function LiveCounter({
       aria-label={label}
       className="flex flex-col items-center gap-1"
     >
-      <p className={big ? "text-sm text-dust" : "text-xs text-dust"}>{label}</p>
+      <p className={big ? "text-sm text-haze" : "text-xs text-haze"}>{label}</p>
       {unit === "seconds" ? (
         <p
-          className={`counter ${big ? "text-4xl sm:text-5xl" : "text-xl"} font-medium text-starlight`}
+          className={`counter ${big ? "text-4xl sm:text-5xl" : "text-xl"} font-medium text-ink`}
         >
           {n(totals.seconds)}{" "}
-          <span className="font-sans text-base text-dust">
+          <span className="font-sans text-base text-haze">
             {t("seconds", { count: totals.seconds })}
           </span>
         </p>
       ) : (
         <>
           <p
-            className={`counter ${big ? "text-3xl sm:text-4xl" : "text-lg"} font-medium text-starlight`}
+            className={`counter ${big ? "text-3xl sm:text-4xl" : "text-lg"} font-medium text-ink`}
           >
             {unit === "days" ? (
               <>
                 {n(totals.days)}{" "}
-                <span className="font-sans text-base text-dust">
+                <span className="font-sans text-base text-haze">
                   {t("days", { count: totals.days })}
                 </span>
               </>
             ) : (
               <>
                 {n(breakdown.years)}{" "}
-                <span className="font-sans text-base text-dust">
+                <span className="font-sans text-base text-haze">
                   {t("years", { count: breakdown.years })}
                 </span>{" "}
                 {n(breakdown.months)}{" "}
-                <span className="font-sans text-base text-dust">
+                <span className="font-sans text-base text-haze">
                   {t("months", { count: breakdown.months })}
                 </span>{" "}
                 {n(breakdown.days)}{" "}
-                <span className="font-sans text-base text-dust">
+                <span className="font-sans text-base text-haze">
                   {t("days", { count: breakdown.days })}
                 </span>
               </>
             )}
           </p>
-          <p className={`counter ${big ? "text-2xl" : "text-base"} text-gold`}>
+          <p className={`counter ${big ? "text-2xl" : "text-base"} text-mist`}>
             {clock}
           </p>
         </>

@@ -4,10 +4,10 @@ export function ProgressBar({ percent }: { percent: number }) {
   return (
     <div
       aria-hidden="true"
-      className="h-1 w-full overflow-hidden rounded-full bg-void-line"
+      className="h-1 w-full overflow-hidden rounded-full bg-sky-line"
     >
       <div
-        className="h-full rounded-full bg-linear-to-r from-flare via-gold to-ember rtl:bg-linear-to-l"
+        className="h-full rounded-full bg-linear-to-r from-halo via-cloud to-cyan rtl:bg-linear-to-l"
         style={{ width: `${lived}%` }}
       />
     </div>

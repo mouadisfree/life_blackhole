@@ -17,24 +17,28 @@ function iconSvg({ pad = 0, rounded = true } = {}): string {
   const t = (v: number) => o + v * k;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${s} ${s}">
   <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a5aa8"/>
+      <stop offset="100%" stop-color="#1c86e0"/>
+    </linearGradient>
     <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="30%" stop-color="#ff6b1a" stop-opacity="0.75"/>
-      <stop offset="62%" stop-color="#ff6b1a" stop-opacity="0.12"/>
-      <stop offset="100%" stop-color="#05050a" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.8"/>
+      <stop offset="62%" stop-color="#9ed8ff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#9ed8ff" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="disk" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#ff6b1a" stop-opacity="0"/>
-      <stop offset="25%" stop-color="#ffb347"/>
-      <stop offset="50%" stop-color="#fff4e0"/>
-      <stop offset="75%" stop-color="#ffb347"/>
-      <stop offset="100%" stop-color="#ff6b1a" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#9ed8ff" stop-opacity="0"/>
+      <stop offset="25%" stop-color="#d9f3ff"/>
+      <stop offset="50%" stop-color="#ffffff"/>
+      <stop offset="75%" stop-color="#d9f3ff"/>
+      <stop offset="100%" stop-color="#9ed8ff" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect width="${s}" height="${s}" rx="${rounded ? 112 : 0}" fill="#05050a"/>
+  <rect width="${s}" height="${s}" rx="${rounded ? 112 : 0}" fill="url(#sky)"/>
   <circle cx="${t(256)}" cy="${t(256)}" r="${236 * k}" fill="url(#glow)"/>
   <ellipse cx="${t(256)}" cy="${t(268)}" rx="${222 * k}" ry="${40 * k}" fill="none" stroke="url(#disk)" stroke-width="${22 * k}"/>
-  <circle cx="${t(256)}" cy="${t(256)}" r="${112 * k}" fill="#000"/>
-  <circle cx="${t(256)}" cy="${t(256)}" r="${118 * k}" fill="none" stroke="#fff4e0" stroke-width="${10 * k}"/>
+  <circle cx="${t(256)}" cy="${t(256)}" r="${112 * k}" fill="#04203d"/>
+  <circle cx="${t(256)}" cy="${t(256)}" r="${118 * k}" fill="none" stroke="#ffffff" stroke-width="${10 * k}"/>
   <path d="M ${t(34)} ${t(268)} A ${222 * k} ${40 * k} 0 0 0 ${t(478)} ${t(268)}" fill="none" stroke="url(#disk)" stroke-width="${22 * k}"/>
 </svg>`;
 }

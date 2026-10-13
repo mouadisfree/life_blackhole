@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { MotionProvider } from "@/components/providers/motion-provider";
+import { SkyBackground } from "@/components/sky/sky-background";
 import { getDirection } from "@/i18n/config";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
@@ -41,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#05050a",
+  themeColor: "#0a5aa8",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
@@ -61,10 +62,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-dvh flex-col overflow-x-hidden">
         <a
           href="#main"
-          className="sr-only rounded-md bg-gold px-4 py-2 text-void focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50"
+          className="sr-only rounded-md bg-cloud px-4 py-2 text-sky-top focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50"
         >
           {t("skipToContent")}
         </a>
+        <SkyBackground />
         <NextIntlClientProvider>
           <MotionProvider>{children}</MotionProvider>
         </NextIntlClientProvider>

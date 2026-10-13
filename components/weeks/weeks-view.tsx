@@ -40,16 +40,16 @@ export function WeeksView() {
     <div className="flex w-full flex-col gap-6">
       <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold">{t("title")}</h1>
-        <p className="text-sm text-dust">{t("intro")}</p>
+        <p className="text-sm text-haze">{t("intro")}</p>
       </header>
 
       {!horizon?.ok ? (
-        <p role="status" className="py-16 text-center text-dust">
+        <p role="status" className="py-16 text-center text-haze">
           {t("loading")}
         </p>
       ) : (
         <>
-          <p className="text-starlight tabular-nums">
+          <p className="text-ink tabular-nums">
             {t("summary", {
               lived: horizon.weeks.livedWeeks,
               remaining: horizon.weeks.totalWeeks - horizon.weeks.livedWeeks,
@@ -57,26 +57,26 @@ export function WeeksView() {
           </p>
 
           <ul
-            className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-dust"
+            className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-haze"
             aria-label={t("legend")}
           >
             <li className="flex items-center gap-2">
               <span
-                className="size-2.5 rounded-full bg-gold"
+                className="size-2.5 rounded-full bg-cloud"
                 aria-hidden="true"
               />
               {t("legendLived")}
             </li>
             <li className="flex items-center gap-2">
               <span
-                className="size-2.5 rounded-full bg-flare"
+                className="size-2.5 rounded-full bg-cyan"
                 aria-hidden="true"
               />
               {t("legendNow")}
             </li>
             <li className="flex items-center gap-2">
               <span
-                className="size-2.5 rounded-full bg-void-line"
+                className="size-2.5 rounded-full bg-white/20"
                 aria-hidden="true"
               />
               {t("legendAhead")}
@@ -99,7 +99,7 @@ export function WeeksView() {
             </figcaption>
           </figure>
 
-          <p className="text-center text-sm text-dust">{t("line")}</p>
+          <p className="text-center text-sm text-haze">{t("line")}</p>
         </>
       )}
     </div>

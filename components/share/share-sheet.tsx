@@ -46,11 +46,11 @@ function OptionSwitch({
   return (
     <div className="flex items-start justify-between gap-4">
       <div className="flex flex-col gap-0.5">
-        <Label htmlFor={id} className="text-sm text-starlight">
+        <Label htmlFor={id} className="text-sm text-ink">
           {label}
         </Label>
         {hint && (
-          <p id={hintId} className="text-xs text-dust">
+          <p id={hintId} className="text-xs text-haze">
             {hint}
           </p>
         )}
@@ -202,7 +202,7 @@ export function ShareSheet({
           {t("open")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[92dvh] overflow-y-auto border-border bg-void-raised sm:max-w-lg">
+      <DialogContent className="max-h-[92dvh] overflow-y-auto border-border bg-sky-deep sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>{t("description")}</DialogDescription>
@@ -220,16 +220,14 @@ export function ShareSheet({
                 className="h-auto max-h-full w-auto max-w-full rounded-xl border border-border object-contain"
               />
             ) : (
-              <p role="status" className="text-sm text-dust">
+              <p role="status" className="text-sm text-haze">
                 {error ? t("error") : t("generating")}
               </p>
             )}
           </div>
 
           <fieldset className="flex flex-col gap-2">
-            <legend className="mb-1 text-sm text-starlight">
-              {t("format")}
-            </legend>
+            <legend className="mb-1 text-sm text-ink">{t("format")}</legend>
             <RadioGroup
               value={cardFormat}
               onValueChange={(v) => setCardFormat(v as ShareFormat)}
@@ -238,7 +236,7 @@ export function ShareSheet({
               {(["story", "post"] as const).map((f) => (
                 <Label
                   key={f}
-                  className="flex min-h-11 items-center gap-2 text-sm text-starlight"
+                  className="flex min-h-11 items-center gap-2 text-sm text-ink"
                 >
                   <RadioGroupItem value={f} />
                   {t(f)}
@@ -248,7 +246,7 @@ export function ShareSheet({
           </fieldset>
 
           <fieldset className="flex flex-col gap-4">
-            <legend className="mb-1 text-sm text-starlight">{t("show")}</legend>
+            <legend className="mb-1 text-sm text-ink">{t("show")}</legend>
             <OptionSwitch
               label={t("showPercent")}
               checked={options.showPercent}

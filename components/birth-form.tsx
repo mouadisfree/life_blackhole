@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, CircleAlert } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useId, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ type ErrorKey =
   "required" | "invalid-date" | "invalid-time-zone" | "future" | "too-old";
 
 const fieldClass =
-  "h-12 w-full rounded-lg border border-input bg-void-raised px-3 text-base text-starlight outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive";
+  "h-12 w-full rounded-lg border border-input bg-sky-deep px-3 text-base text-ink outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive";
 
 function currentTimeZone(): string {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -85,7 +85,7 @@ export function BirthForm({
       className="flex w-full flex-col gap-5 text-start"
     >
       <div className="flex flex-col gap-2">
-        <Label htmlFor={ids.date} className="text-sm text-dust">
+        <Label htmlFor={ids.date} className="text-sm text-haze">
           {t("birthDate")}
         </Label>
         <input
@@ -104,7 +104,16 @@ export function BirthForm({
           aria-describedby={error ? ids.error : undefined}
         />
         {error && (
-          <p id={ids.error} role="alert" className="text-sm text-destructive">
+          // White + icon: red text can't reach AA contrast on the sky.
+          <p
+            id={ids.error}
+            role="alert"
+            className="flex items-start gap-2 text-sm font-medium text-ink"
+          >
+            <CircleAlert
+              aria-hidden="true"
+              className="mt-0.5 size-4 shrink-0 text-[#ffb4b4]"
+            />
             {t(`errors.${error}`)}
           </p>
         )}
@@ -116,7 +125,7 @@ export function BirthForm({
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-controls={ids.panel}
-          className="flex items-center gap-2 self-start rounded-md text-sm text-gold outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="flex items-center gap-2 self-start rounded-md text-sm text-mist outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           {t("improveAccuracy")}
           <ChevronDown
@@ -128,12 +137,12 @@ export function BirthForm({
         {open && (
           <div
             id={ids.panel}
-            className="flex flex-col gap-5 rounded-xl border border-border bg-void-raised/60 p-4"
+            className="flex flex-col gap-5 rounded-xl border border-border bg-sky-deep/60 p-4"
           >
-            <p className="text-sm text-dust">{t("improveAccuracyHint")}</p>
+            <p className="text-sm text-haze">{t("improveAccuracyHint")}</p>
 
             <div className="flex flex-col gap-2">
-              <Label htmlFor={ids.country} className="text-sm text-dust">
+              <Label htmlFor={ids.country} className="text-sm text-haze">
                 {t("country")}
               </Label>
               <select
@@ -157,8 +166,8 @@ export function BirthForm({
             </div>
 
             <fieldset className="flex flex-col gap-2">
-              <legend className="text-sm text-dust">{t("sex")}</legend>
-              <p className="-mt-1 text-xs text-dust">{t("sexHint")}</p>
+              <legend className="text-sm text-haze">{t("sex")}</legend>
+              <p className="-mt-1 text-xs text-haze">{t("sexHint")}</p>
               <RadioGroup
                 value={sex}
                 onValueChange={(v) => setSex(v as Sex)}
@@ -167,7 +176,7 @@ export function BirthForm({
                 {(["female", "male", "unspecified"] as const).map((value) => (
                   <Label
                     key={value}
-                    className="flex min-h-11 items-center gap-2 text-sm text-starlight"
+                    className="flex min-h-11 items-center gap-2 text-sm text-ink"
                   >
                     <RadioGroupItem value={value} />
                     {t(
@@ -183,10 +192,10 @@ export function BirthForm({
             </fieldset>
 
             <div className="flex flex-col gap-2">
-              <Label htmlFor={ids.time} className="text-sm text-dust">
+              <Label htmlFor={ids.time} className="text-sm text-haze">
                 {t("birthTime")}
               </Label>
-              <p id={ids.timeHint} className="-mt-1 text-xs text-dust">
+              <p id={ids.timeHint} className="-mt-1 text-xs text-haze">
                 {t("birthTimeHint")}
               </p>
               <input

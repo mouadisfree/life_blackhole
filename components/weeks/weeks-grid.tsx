@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { WeeksGrid as Grid } from "@/lib/weeks";
+import { PALETTE } from "@/lib/palette";
 import { WEEKS_PER_ROW } from "@/lib/weeks";
 
 const GAP = 2;
@@ -11,11 +12,11 @@ const LABEL_WIDTH = 28;
 const PAD_TOP = 6;
 
 const COLORS = {
-  lived: "#ffb347",
-  livedOld: "#ff6b1a",
-  ahead: "#1c1b2b",
-  now: "#fff4e0",
-  label: "#9d99ad",
+  lived: PALETTE.cloud,
+  livedOld: PALETTE.mist,
+  ahead: "rgba(255,255,255,0.2)",
+  now: PALETTE.cyan,
+  label: PALETTE.haze,
 };
 
 /**
@@ -86,7 +87,7 @@ export function WeeksGrid({
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
         if (index < grid.livedWeeks) {
-          // Earlier years shade from gold toward ember.
+          // Later years shade from cloud white toward mist.
           ctx.fillStyle =
             row / grid.rows < 0.5 ? COLORS.lived : COLORS.livedOld;
           ctx.globalAlpha = 0.9;
@@ -122,7 +123,7 @@ export function WeeksGrid({
       <canvas ref={canvas} className="block" />
       {layout && grid.current && (
         <span
-          className="absolute rounded-full bg-flare motion-safe:animate-ping"
+          className="absolute rounded-full bg-cyan motion-safe:animate-ping"
           title={yearLabel(grid.current.row)}
           style={{
             width: layout.cell,

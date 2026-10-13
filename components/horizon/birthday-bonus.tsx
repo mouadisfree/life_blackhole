@@ -23,7 +23,7 @@ export function BirthdayBonus({
       {open && (
         <motion.aside
           aria-labelledby="birthday-bonus-title"
-          className="flex w-full max-w-md flex-col gap-3 rounded-2xl border border-gold/40 bg-void-raised/80 p-5 text-center shadow-[0_0_60px_-20px_var(--gold)]"
+          className="flex w-full max-w-md flex-col gap-3 rounded-2xl border border-cloud/40 bg-sky-deep/80 p-5 text-center shadow-[0_0_60px_-20px_var(--cloud)]"
           initial={{ opacity: 0, y: -12, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -31,16 +31,16 @@ export function BirthdayBonus({
         >
           <h2
             id="birthday-bonus-title"
-            className="text-lg font-semibold text-gold"
+            className="text-lg font-semibold text-mist"
           >
             {t("bonusMomentTitle")}
           </h2>
-          <p className="text-starlight">
+          <p className="text-ink">
             {unit === "days"
               ? t("bonusMomentDays", { count })
               : t("bonusMomentWeeks", { count })}
           </p>
-          <p className="text-sm text-dust">{t("bonusMomentNote")}</p>
+          <p className="text-sm text-haze">{t("bonusMomentNote")}</p>
           <Button
             variant="outline"
             className="self-center rounded-full"

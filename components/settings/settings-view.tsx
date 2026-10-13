@@ -38,7 +38,7 @@ function Section({
   return (
     <section
       aria-labelledby={id}
-      className="flex flex-col gap-5 rounded-2xl border border-border bg-void-raised/60 p-5"
+      className="flex flex-col gap-5 rounded-2xl border border-border bg-sky-deep/60 p-5"
     >
       <h2 id={id} className="text-base font-semibold">
         {title}
@@ -66,11 +66,11 @@ function SwitchRow({
   return (
     <div className="flex items-start justify-between gap-4">
       <div className="flex flex-col gap-1">
-        <Label htmlFor={id} className="text-sm text-starlight">
+        <Label htmlFor={id} className="text-sm text-ink">
           {label}
         </Label>
         {hint && (
-          <p id={hintId} className="text-xs text-dust">
+          <p id={hintId} className="text-xs text-haze">
             {hint}
           </p>
         )}
@@ -100,7 +100,7 @@ function ChoiceGroup<T extends string>({
 }) {
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="mb-2 text-sm text-starlight">{legend}</legend>
+      <legend className="mb-2 text-sm text-ink">{legend}</legend>
       <RadioGroup
         value={value}
         onValueChange={(v) => onChange(v as T)}
@@ -109,7 +109,7 @@ function ChoiceGroup<T extends string>({
         {options.map((o) => (
           <Label
             key={o.value}
-            className="flex min-h-11 items-center gap-3 text-sm text-starlight"
+            className="flex min-h-11 items-center gap-3 text-sm text-ink"
           >
             <RadioGroupItem value={o.value} />
             {o.label}
@@ -152,13 +152,13 @@ export function SettingsView() {
                 setSaved(true);
               }}
             />
-            <p role="status" className="text-sm text-gold">
+            <p role="status" className="text-sm text-mist">
               {saved ? tf("saved") : ""}
             </p>
           </>
         ) : (
           <div className="flex flex-col items-start gap-3">
-            <p className="text-sm text-dust">{t("noProfile")}</p>
+            <p className="text-sm text-haze">{t("noProfile")}</p>
             <Button asChild variant="outline">
               <Link href="/">{tf("submit")}</Link>
             </Button>
@@ -203,7 +203,7 @@ export function SettingsView() {
       </Section>
 
       <Section title={t("privacyTitle")}>
-        <p className="text-sm text-dust">{t("privacyBody")}</p>
+        <p className="text-sm text-haze">{t("privacyBody")}</p>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="destructive" className="self-start">
@@ -233,7 +233,7 @@ export function SettingsView() {
         </AlertDialog>
       </Section>
 
-      <p className="px-2 text-center text-xs text-dust">{tw("note")}</p>
+      <p className="px-2 text-center text-xs text-haze">{tw("note")}</p>
     </div>
   );
 }
