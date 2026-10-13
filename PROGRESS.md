@@ -4,16 +4,16 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 
 ## Status
 
-| Phase                      | Status                                                                  |
-| -------------------------- | ----------------------------------------------------------------------- |
-| 1 — Setup & plan           | Done 2026-10-12 (approved)                                              |
-| 2 — Life math & data       | Done 2026-10-12 (approved)                                              |
-| 3 — Core flow              | Done 2026-10-12 (approved)                                              |
-| 4 — The black hole         | Done 2026-10-12 (approved)                                              |
-| 5 — Life in weeks + polish | Done 2026-10-12 (approved)                                              |
-| 6 — Share                  | Done 2026-10-12 (approved)                                              |
-| 7 — Launch prep            | Done 2026-10-12 (approved)                                              |
-| 8 — Deploy                 | Ready 2026-10-12 — owner pushing to GitHub and deploying (no analytics) |
+| Phase                      | Status                                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------------------- |
+| 1 — Setup & plan           | Done 2026-10-12 (approved)                                                                        |
+| 2 — Life math & data       | Done 2026-10-12 (approved)                                                                        |
+| 3 — Core flow              | Done 2026-10-12 (approved)                                                                        |
+| 4 — The black hole         | Done 2026-10-12 (approved)                                                                        |
+| 5 — Life in weeks + polish | Done 2026-10-12 (approved)                                                                        |
+| 6 — Share                  | Done 2026-10-12 (approved)                                                                        |
+| 7 — Launch prep            | Done 2026-10-12 (approved)                                                                        |
+| 8 — Deploy                 | Live 2026-10-13 at https://life-blackhole.vercel.app — custom domain + real-device checks pending |
 
 ## Done
 
@@ -98,9 +98,18 @@ Build spec: [PROMPT.md](PROMPT.md). Conventions: [CLAUDE.md](CLAUDE.md).
 - `LAUNCH.md`: GitHub push, Vercel project settings and env vars, custom domain, optional analytics, launch checklist (pre-launch URLs, real iPhone/Android checks, desktop, post-launch, yearly data refresh).
 - Owner creates the GitHub repo and Vercel project and sets domain DNS. Analytics: none (D31).
 
+### Phase 8 — Live (2026-10-13)
+
+- Deployed from GitHub `mouadisfree/life_blackhole` (`main`) to Vercel (Hobby) at https://life-blackhole.vercel.app with `NEXT_PUBLIC_SITE_URL` and `ENABLE_EXPERIMENTAL_COREPACK=1`.
+- Verified in production: every route and asset returns the right status/type; `/debug` 404; robots, sitemap, Open Graph/Twitter tags and icons use the production URL; personal pages `noindex`; data served Brotli-compressed; HSTS on.
+- Lighthouse mobile (production): `/` 100·100·100·100, `/about` 100·100·100·100, `/horizon` 95·100·100·(noindex), `/weeks` 100·100·100·(noindex).
+- Production smoke test (iPhone 15 WebKit, Pixel 7 Chromium): landing → live numbers in < 1 s, counters tick, black hole renders (WebGL on WebKit), share preview renders, no birth date in URL, **zero requests to other origins**, no console errors.
+- Note: Next 16 keeps previously visited pages mounted but hidden (React Activity, `display: none`); effects clean up, so hidden black holes don't animate.
+
 ## Next
 
-- Push to GitHub, first Vercel deploy, set the domain; then run the checklist in `LAUNCH.md` and `BASE_URL=https://<domain> pnpm lighthouse`.
+- Optional custom domain (then update `NEXT_PUBLIC_SITE_URL` and redeploy).
+- Real-device checks on an iPhone and an Android phone (LAUNCH.md §5).
 - V2 backlog (after approval): accounts/sync (Supabase), intentions, PWA offline + reminders, lifestyle adjustments with cited sources, FR/AR/Darija, ambient sound.
 
 ## Decisions

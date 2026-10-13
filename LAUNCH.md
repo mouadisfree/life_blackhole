@@ -42,13 +42,13 @@ Vercel Web Analytics is cookie-less and doesn't collect personal data, but it is
 
 ### Before announcing
 
-- [ ] Production deploy succeeds; build log shows pnpm 12 / Node 24.
+- [ ] Production deploy succeeds; build log shows pnpm 12 / Node 24. (Deploy confirmed live; build-log versions not yet checked.)
 - [ ] `NEXT_PUBLIC_SITE_URL` is the final domain; redeployed after changing it.
-- [ ] `https://<domain>/robots.txt` lists the sitemap and disallows `/horizon`, `/weeks`, `/settings`.
-- [ ] `https://<domain>/sitemap.xml` has only `/` and `/about` with the right domain.
+- [x] `https://<domain>/robots.txt` lists the sitemap and disallows `/horizon`, `/weeks`, `/settings`.
+- [x] `https://<domain>/sitemap.xml` has only `/` and `/about` with the right domain.
 - [ ] `https://<domain>/manifest.webmanifest` loads; icons show in the tab and on "Add to Home Screen".
 - [ ] Paste the URL into a link-preview tester (opengraph.xyz, or a WhatsApp/iMessage/Slack message to yourself): the generic black-hole card appears.
-- [ ] `/debug` returns 404 in production.
+- [x] `/debug` returns 404 in production.
 
 ### On a real iPhone (Safari) and Android phone (Chrome)
 
@@ -68,6 +68,6 @@ Vercel Web Analytics is cookie-less and doesn't collect personal data, but it is
 
 ### After launch
 
-- [ ] Run `BASE_URL=https://<domain> pnpm lighthouse` against production.
+- [x] Run `BASE_URL=https://<domain> pnpm lighthouse` against production.
 - [ ] Watch Vercel's deployment and function logs for errors in the first days.
 - [ ] Each January (or when WPP 2026 is published): bump `TABLE_YEAR`, `pnpm data:download && pnpm data:build`, update the year in `lib/life-expectancy.ts` (`LIFE_TABLES_URL`), page preloads and the About copy, run tests, deploy.
